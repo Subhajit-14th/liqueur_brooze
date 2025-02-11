@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/dashboard_screen.dart';
+import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
+import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -15,34 +18,73 @@ class LoginScreen extends StatelessWidget {
             // Header with orange background
             Stack(
               children: [
-                Container(
-                  height: 300,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFF6E40),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(80),
-                      bottomRight: Radius.circular(80),
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(80),
+                    bottomRight: Radius.circular(80),
+                  ),
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                    child: Container(
+                      height: 450,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(80),
+                          bottomRight: Radius.circular(80),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(80),
+                            blurRadius: 10,
+                            spreadRadius: 10,
+                          ),
+                        ],
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://hips.hearstapps.com/hmg-prod/images/orange-licqueur-1646176129.jpg?crop=0.772xw:0.695xh;0.0625xw,0.190xh&resize=1200:*'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 120),
-                      const Text(
-                        "Welcome to Liqueur Shop",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                Align(
+                  alignment: Alignment.center,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/app_logo/app_logo.png',
+                          scale: 2,
                         ),
-                      ),
-                    ],
+
+                        //// Heading
+                        Text(
+                          "WELCOME TO LIQUOR SHOP",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                color: AppColor.primaryColor.withAlpha(500),
+                                blurRadius: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.09),
+
             // Input fields
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -96,36 +138,14 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            // Buttons
+
+            // Login Button
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DashboardScreen(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF6E40),
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+              padding: const EdgeInsets.only(left: 24, right: 24),
+              child: CommonButton(
+                buttonText: 'Login',
+                onTap: () {},
+                width: double.infinity,
               ),
             ),
           ],

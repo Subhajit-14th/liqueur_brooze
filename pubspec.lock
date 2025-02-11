@@ -145,7 +145,7 @@ packages:
     source: sdk
     version: "0.0.0"
   get_it:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: get_it
       sha256: f126a3e286b7f5b578bf436d5592968706c4c1de28a228b870ce375d9f743103
@@ -161,7 +161,7 @@ packages:
     source: hosted
     version: "2.2.3"
   hive_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: hive_flutter
       sha256: dca1da446b1d808a51689fb5d0c6c9510c0a2ba01e22805d492c73b68e33eecc
@@ -169,7 +169,7 @@ packages:
     source: hosted
     version: "1.1.0"
   http:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: http
       sha256: fe7ab022b76f3034adc518fb6ea04a82387620e19977665ea18d30a1cf43442f
@@ -185,7 +185,7 @@ packages:
     source: hosted
     version: "4.1.2"
   image_picker:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: image_picker
       sha256: "021834d9c0c3de46bf0fe40341fa07168407f694d9b2bb18d532dc1261867f7a"
@@ -249,7 +249,7 @@ packages:
     source: hosted
     version: "0.2.1+1"
   intl:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
@@ -321,7 +321,7 @@ packages:
     source: hosted
     version: "2.0.0"
   multi_select_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: multi_select_flutter
       sha256: "503857b415d390d29159df8a9d92d83c6aac17aaf1c307fb7bcfc77d097d20ed"
@@ -337,15 +337,15 @@ packages:
     source: hosted
     version: "1.0.0"
   path:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: path
-      sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"
+      sha256: "75cca69d1490965be98c73ceaea117e8a04dd21217b37b292c9ddbec0d955bc5"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.9.1"
   path_provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: "50c5dd5b6e1aaf6fb3a78b33f6aa3afca52bf903a8a5298f53101fdaee55bbcd"
@@ -409,7 +409,7 @@ packages:
     source: hosted
     version: "2.1.8"
   provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: provider
       sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c

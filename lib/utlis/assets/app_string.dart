@@ -1,5 +1,5 @@
 class AppString {
-  static String _baseUrl = "";
+  static final String _baseUrl = "";
 
   String get baseUrl => _baseUrl;
 }

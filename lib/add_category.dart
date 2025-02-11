@@ -8,7 +8,7 @@ class AddCategoryScreen extends StatefulWidget {
 }
 
 class _AddCategoryScreenState extends State<AddCategoryScreen> {
-  TextEditingController _categoryName = TextEditingController();
+  final TextEditingController _categoryName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
