@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/login_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:liqueur_brooze/view/LoginScreen/login_screen.dart';
+import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
+import 'package:liqueur_brooze/viewModel/auth_provider.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// Set the status bar color globally
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: AppColor.primaryColor, // Set the desired color
+    statusBarIconBrightness: Brightness.light, // Light or dark icons
+  ));
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => AuthProvider()),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

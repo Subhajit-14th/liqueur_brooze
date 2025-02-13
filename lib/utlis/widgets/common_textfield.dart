@@ -27,18 +27,18 @@ class CommonTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(
-          color: Colors.black,
+          color: AppColor.secondaryColor,
         ),
         labelText: labelText,
         labelStyle: const TextStyle(
-          color: Colors.black,
+          color: AppColor.secondaryColor,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.never,
         focusColor: Colors.black,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: AppColor.primaryColor,
+            color: AppColor.secondaryColor,
           ),
         ),
         border: OutlineInputBorder(

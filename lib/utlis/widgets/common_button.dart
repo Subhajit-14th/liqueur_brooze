@@ -2,39 +2,38 @@ import 'package:flutter/material.dart';
 
 import '../assets/app_colors.dart';
 
-class CommonButton extends StatefulWidget {
+class CommonButton extends StatelessWidget {
   const CommonButton({
     super.key,
     required this.width,
     required this.buttonText,
     this.height,
     this.onTap,
+    required this.buttonColor,
+    this.borderRadius,
   });
 
   final double width;
   final double? height;
   final String buttonText;
+  final Color buttonColor;
   final Function()? onTap;
+  final double? borderRadius;
 
-  @override
-  State<CommonButton> createState() => _CommonButtonState();
-}
-
-class _CommonButtonState extends State<CommonButton> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onTap,
+      onTap: onTap,
       child: Container(
-        height: widget.height ?? 50,
-        width: widget.width,
+        height: height ?? 50,
+        width: width,
         decoration: BoxDecoration(
-          color: AppColor.primaryColor,
-          borderRadius: BorderRadius.circular(10),
+          color: buttonColor,
+          borderRadius: BorderRadius.circular(borderRadius ?? 10),
         ),
         child: Center(
           child: Text(
-            widget.buttonText,
+            buttonText,
             style: TextStyle(
               color: AppColor.lightTextColor,
               fontSize: 18,

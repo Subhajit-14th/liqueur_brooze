@@ -7,7 +7,9 @@ class CommonPasswordField extends StatefulWidget {
     super.key,
     required this.labelText,
     required this.hintText,
+    required this.controller,
   });
+  final TextEditingController controller;
   final String labelText;
   final String hintText;
 
@@ -21,6 +23,7 @@ class _CommonPasswordFieldState extends State<CommonPasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.controller,
       obscureText: isNotShow,
       cursorColor: AppColor.darkTextColor,
       style: const TextStyle(
@@ -29,11 +32,11 @@ class _CommonPasswordFieldState extends State<CommonPasswordField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: const TextStyle(
-          color: AppColor.darkTextColor,
+          color: AppColor.secondaryColor,
         ),
         labelText: widget.labelText,
         labelStyle: const TextStyle(
-          color: AppColor.darkTextColor,
+          color: AppColor.secondaryColor,
         ),
         focusColor: Colors.black,
         focusedBorder: OutlineInputBorder(
@@ -56,7 +59,7 @@ class _CommonPasswordFieldState extends State<CommonPasswordField> {
           },
           icon: Icon(
             isNotShow ? Icons.visibility_rounded : Icons.visibility_off_rounded,
-            color: Colors.black,
+            color: AppColor.secondaryColor,
           ),
         ),
       ),

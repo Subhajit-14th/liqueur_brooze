@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/add_category.dart';
+import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
@@ -7,8 +8,10 @@ class AdminDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      elevation: 0,
+      width: MediaQuery.of(context).size.width / 1.8,
       child: Container(
-        color: Colors.red.shade400,
+        color: AppColor.primaryColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

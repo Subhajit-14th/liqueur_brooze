@@ -9,11 +9,11 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Panel'),
-        backgroundColor: Colors.orange.shade50,
+        backgroundColor: Colors.white,
         elevation: 0,
         foregroundColor: Colors.black,
       ),
-      backgroundColor: Colors.orange.shade50,
+      backgroundColor: Colors.white,
       drawer: const AdminDrawer(),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
