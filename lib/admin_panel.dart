@@ -26,15 +26,15 @@ class AdminDrawer extends StatelessWidget {
               ),
             ),
             DrawerItem(
-              icon: Icons.dashboard,
+              icon: Icons.dashboard_rounded,
               text: 'Dashboard',
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             DrawerItem(
-              icon: Icons.category,
-              text: 'Add Category',
+              icon: Icons.inventory_2_rounded,
+              text: 'Pages',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -46,33 +46,43 @@ class AdminDrawer extends StatelessWidget {
               },
             ),
             DrawerItem(
-              icon: Icons.add,
-              text: 'Add Products',
+              icon: Icons.shopping_cart_rounded,
+              text: 'Category',
               onTap: () {},
             ),
             DrawerItem(
-              icon: Icons.update,
-              text: 'Update Products',
+              icon: Icons.receipt_long_rounded,
+              text: 'Sub Category',
               onTap: () {},
             ),
             DrawerItem(
-              icon: Icons.delete,
-              text: 'Delete Products',
+              icon: Icons.account_balance_wallet_rounded,
+              text: 'Product',
               onTap: () {},
             ),
             DrawerItem(
-              icon: Icons.shopping_cart,
-              text: 'Cart Items',
+              icon: Icons.person_2_rounded,
+              text: 'User',
               onTap: () {},
             ),
             DrawerItem(
-              icon: Icons.location_on,
-              text: 'Locations',
-              onTap: () {},
-            ),
-            DrawerItem(
-              icon: Icons.card_giftcard,
+              icon: Icons.inventory_2_rounded,
               text: 'Coupon',
+              onTap: () {},
+            ),
+            DrawerItem(
+              icon: Icons.add_shopping_cart_rounded,
+              text: 'Shipping Charge',
+              onTap: () {},
+            ),
+            DrawerItem(
+              icon: Icons.cable_rounded,
+              text: 'Default Charge',
+              onTap: () {},
+            ),
+            DrawerItem(
+              icon: Icons.settings_rounded,
+              text: 'Settings',
               onTap: () {},
             ),
           ],
