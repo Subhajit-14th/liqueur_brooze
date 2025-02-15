@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/add_category.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
+import 'package:liqueur_brooze/viewModel/router_provider.dart';
+import 'package:provider/provider.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final routerProvider = Provider.of<RouterProvider>(context);
     return Drawer(
       elevation: 0,
       width: MediaQuery.of(context).size.width / 1.8,
@@ -30,6 +32,7 @@ class AdminDrawer extends StatelessWidget {
               text: 'Dashboard',
               onTap: () {
                 Navigator.pop(context);
+                routerProvider.setPageIndex(0);
               },
             ),
             DrawerItem(
@@ -37,23 +40,24 @@ class AdminDrawer extends StatelessWidget {
               text: 'Pages',
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddCategoryScreen(),
-                  ),
-                );
+                routerProvider.setPageIndex(1);
               },
             ),
             DrawerItem(
               icon: Icons.shopping_cart_rounded,
               text: 'Category',
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                routerProvider.setPageIndex(2);
+              },
             ),
             DrawerItem(
               icon: Icons.receipt_long_rounded,
               text: 'Sub Category',
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                routerProvider.setPageIndex(3);
+              },
             ),
             DrawerItem(
               icon: Icons.account_balance_wallet_rounded,

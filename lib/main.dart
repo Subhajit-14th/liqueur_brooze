@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:liqueur_brooze/view/LoginScreen/login_screen.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
+import 'package:liqueur_brooze/viewModel/addcoupon_provider.dart';
 import 'package:liqueur_brooze/viewModel/auth_provider.dart';
 import 'package:liqueur_brooze/viewModel/dashboard_screen_provider.dart';
+import 'package:liqueur_brooze/viewModel/router_provider.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -18,6 +20,8 @@ Future<void> main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => AuthProvider()),
     ChangeNotifierProvider(create: (context) => DashboardScreenProvider()),
+    ChangeNotifierProvider(create: (context) => RouterProvider()),
+    ChangeNotifierProvider(create: (context) => AddcouponProvider()),
   ], child: const MyApp()));
 }
 

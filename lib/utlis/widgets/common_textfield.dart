@@ -7,12 +7,14 @@ class CommonTextField extends StatelessWidget {
       required this.labelText,
       required this.hintText,
       required this.controller,
-      this.onTap});
+      this.onTap,
+      this.suffixIconData});
 
   final TextEditingController controller;
   final String labelText;
   final String hintText;
   final Function()? onTap;
+  final IconData? suffixIconData;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,12 @@ class CommonTextField extends StatelessWidget {
         ),
         floatingLabelBehavior: FloatingLabelBehavior.never,
         focusColor: Colors.black,
+        suffixIcon: suffixIconData != null
+            ? Icon(
+                suffixIconData,
+                color: AppColor.secondaryColor,
+              )
+            : SizedBox(),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(

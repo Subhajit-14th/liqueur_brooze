@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/admin_panel.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
+import 'package:liqueur_brooze/view/AddCouponScreen/add_coupon_screen.dart';
+import 'package:liqueur_brooze/view/DashboardScreen/coupon_delete_dialog.dart';
 import 'package:liqueur_brooze/viewModel/dashboard_screen_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,256 +14,260 @@ class DashboardScreen extends StatelessWidget {
     final dashboardScreenProvider =
         Provider.of<DashboardScreenProvider>(context);
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black,
-      ),
-      backgroundColor: Colors.white,
-      drawer: const AdminDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-          children: [
-            /// Add Coupon Text And Button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'All Coupon',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Monserat',
-                      ),
-                    ),
-                    Text(
-                      'Manage your All Coupon',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: 'Monserat',
-                      ),
-                    ),
-                  ],
-                ),
-                CommonButton(
-                  width: 130,
-                  height: 40,
-                  buttonText: 'Add Coupon',
-                  buttonColor: AppColor.primaryColor,
-                )
-              ],
-            ),
-            SizedBox(height: height * 0.02),
-
-            /// Coupon Items
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: AppColor.secondaryColor,
-                  strokeAlign: 0.6,
-                ),
-              ),
-              child: Column(
+    return Column(
+      children: [
+        /// Heading items and add coupon buttons
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      /// Filter Icon
-                      Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppColor.primaryColor,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.filter_alt_rounded,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Spacer(),
-
-                      /// PDF Button
-                      Icon(
-                        Icons.picture_as_pdf,
-                        color: Colors.red,
-                        size: 28,
-                      ),
-                      SizedBox(width: width * 0.02),
-
-                      /// List Button
-                      Icon(
-                        Icons.list_alt_rounded,
-                        color: Colors.green,
-                        size: 28,
-                      ),
-                      SizedBox(width: width * 0.02),
-
-                      /// Print Button
-                      Icon(
-                        Icons.print_rounded,
-                        color: Colors.grey,
-                        size: 28,
-                      ),
-                    ],
+                  Text(
+                    'All Coupon',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Monserat',
+                    ),
                   ),
-                  Divider(color: Colors.grey),
+                  Text(
+                    'Manage your All Coupon',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: 'Monserat',
+                    ),
+                  ),
+                ],
+              ),
+              CommonButton(
+                width: 130,
+                height: 40,
+                buttonText: 'Add Coupon',
+                buttonColor: AppColor.primaryColor,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddCouponScreen()));
+                },
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: height * 0.02),
 
-                  /// Heading
-                  SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        /// Coupon Lists
+        Expanded(
+          child: ListView.builder(
+            itemCount: 10,
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            padding: EdgeInsets.all(16),
+            itemBuilder: (context, index) {
+              return Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.all(10),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(50),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      spacing: 18,
                       children: [
-                        Row(
+                        /// Coupon Type Or Coupon Code
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            /// Coupon Type
                             Text(
-                              'SL',
+                              'Coupon Type',
                               style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Monserat',
+                              ),
+                            ),
+                            Text(
+                              'Percentage',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Monserat',
                               ),
                             ),
-                            SizedBox(width: 18),
-                            Text(
-                              'Coupon type',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Monserat',
-                              ),
-                            ),
-                            SizedBox(width: 18),
+                            SizedBox(height: height * 0.02),
+
+                            /// Coupon Code
                             Text(
                               'Coupon Code',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
                                 fontFamily: 'Monserat',
                               ),
                             ),
-                            SizedBox(width: 18),
                             Text(
-                              'Value',
+                              '926F',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Monserat',
-                              ),
-                            ),
-                            SizedBox(width: 18),
-                            Text(
-                              'Start Date',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Monserat',
-                              ),
-                            ),
-                            SizedBox(width: 18),
-                            Text(
-                              'Ending Date',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Monserat',
-                              ),
-                            ),
-                            SizedBox(width: 18),
-                            Text(
-                              'Action',
-                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Monserat',
                               ),
                             ),
                           ],
                         ),
-                        for (var i = 0;
-                            i < dashboardScreenProvider.couponItems.length;
-                            i++) ...{
-                          Row(
-                            children: [
-                              Text(
-                                '${i + 1}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
+
+                        /// Value and start date and end date
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// Value
+                            Text(
+                              'Value',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Monserat',
                               ),
-                              SizedBox(width: 18),
-                              Text(
-                                dashboardScreenProvider
-                                    .couponItems[i].couponType,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
+                            ),
+                            Text(
+                              '1600',
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Monserat',
                               ),
-                              SizedBox(width: 18),
-                              Text(
-                                dashboardScreenProvider
-                                    .couponItems[i].couponCode,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
+                            ),
+                            SizedBox(height: height * 0.02),
+
+                            /// Start Date End Date
+                            Row(
+                              spacing: 14,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Start Date',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Monserat',
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_month_rounded,
+                                          color: Colors.grey,
+                                          size: 16,
+                                        ),
+                                        Text(
+                                          '12/12/2025',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Monserat',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(width: 18),
-                              Text(
-                                dashboardScreenProvider.couponItems[i].value,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'End Date',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Monserat',
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_month_rounded,
+                                          color: Colors.grey,
+                                          size: 16,
+                                        ),
+                                        Text(
+                                          '12/12/2025',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Monserat',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(width: 18),
-                              Text(
-                                dashboardScreenProvider
-                                    .couponItems[i].startDate,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                              SizedBox(width: 18),
-                              Text(
-                                dashboardScreenProvider
-                                    .couponItems[i].endingDate,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                              SizedBox(width: 18),
-                              Text(
-                                'Action',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                            ],
-                          ),
-                        },
+                              ],
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => CouponDeleteDialog(),
+                      );
+                    },
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: AppColor.primaryColor,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(14),
+                            bottomLeft: Radius.circular(10),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.delete_outline_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ],
+              );
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 }

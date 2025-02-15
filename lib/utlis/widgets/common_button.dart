@@ -11,11 +11,13 @@ class CommonButton extends StatelessWidget {
     this.onTap,
     required this.buttonColor,
     this.borderRadius,
+    this.buttonTextFontSize,
   });
 
   final double width;
   final double? height;
   final String buttonText;
+  final double? buttonTextFontSize;
   final Color buttonColor;
   final Function()? onTap;
   final double? borderRadius;
@@ -36,7 +38,7 @@ class CommonButton extends StatelessWidget {
             buttonText,
             style: TextStyle(
               color: AppColor.lightTextColor,
-              fontSize: 18,
+              fontSize: buttonTextFontSize ?? 18,
               fontWeight: FontWeight.w500,
               fontFamily: 'Lato',
             ),

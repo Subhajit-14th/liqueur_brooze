@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/view/DashboardScreen/dashboard_screen.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_passwordfield.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_textfield.dart';
+import 'package:liqueur_brooze/view/MainRouteScreen/main_route_screen.dart';
 import 'package:liqueur_brooze/viewModel/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -167,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen>
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DashboardScreen()));
+                            builder: (context) => MainRouteScreen()));
                   },
                   width: width / 1.4,
                   buttonColor: AppColor.secondaryColor,
