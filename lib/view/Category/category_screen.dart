@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/view/SubCategory/add_sub_category.dart';
-import 'package:liqueur_brooze/view/SubCategory/all_sub_category.dart';
+import 'package:liqueur_brooze/view/Category/add_category.dart';
+import 'package:liqueur_brooze/view/Category/all_category.dart';
 
-class SubCategoryScreen extends StatelessWidget {
-  const SubCategoryScreen({super.key});
+class CategoryScreen extends StatelessWidget {
+  const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +11,11 @@ class SubCategoryScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         children: [
-          /// Add Sub Category Button
+          /// Add Category Button
           InkWell(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddSubCategory()));
+                  MaterialPageRoute(builder: (context) => AddCategoryScreen()));
             },
             child: Container(
               height: 55,
@@ -46,7 +46,7 @@ class SubCategoryScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Add Sub Category',
+                    'Add Category',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -59,11 +59,11 @@ class SubCategoryScreen extends StatelessWidget {
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-          /// All Sub Category Button
+          /// All Category Button
           InkWell(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AllSubCategory()));
+                  MaterialPageRoute(builder: (context) => AllCategory()));
             },
             child: Container(
               height: 55,
@@ -94,7 +94,7 @@ class SubCategoryScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'All Sub Category',
+                    'All Category',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

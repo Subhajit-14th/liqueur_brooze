@@ -62,22 +62,34 @@ class AdminDrawer extends StatelessWidget {
             DrawerItem(
               icon: Icons.account_balance_wallet_rounded,
               text: 'Product',
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                routerProvider.setPageIndex(4);
+              },
             ),
             DrawerItem(
               icon: Icons.person_2_rounded,
               text: 'User',
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                routerProvider.setPageIndex(5);
+              },
             ),
             DrawerItem(
               icon: Icons.inventory_2_rounded,
               text: 'Coupon',
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                routerProvider.setPageIndex(6);
+              },
             ),
             DrawerItem(
               icon: Icons.add_shopping_cart_rounded,
               text: 'Shipping Charge',
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                routerProvider.setPageIndex(7);
+              },
             ),
             DrawerItem(
               icon: Icons.cable_rounded,

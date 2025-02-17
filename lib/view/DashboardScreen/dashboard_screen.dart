@@ -3,16 +3,12 @@ import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 import 'package:liqueur_brooze/view/AddCouponScreen/add_coupon_screen.dart';
 import 'package:liqueur_brooze/view/DashboardScreen/coupon_delete_dialog.dart';
-import 'package:liqueur_brooze/viewModel/dashboard_screen_provider.dart';
-import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final dashboardScreenProvider =
-        Provider.of<DashboardScreenProvider>(context);
     var height = MediaQuery.of(context).size.height;
     return Column(
       children: [

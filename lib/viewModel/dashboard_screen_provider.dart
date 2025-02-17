@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/model/DashboardCouponItemsModel.dart';
+import 'package:liqueur_brooze/model/dashboardCouponItemsModel.dart';
 
 class DashboardScreenProvider extends ChangeNotifier {
   final List<Dashboardcouponitemsmodel> _couponItems = [

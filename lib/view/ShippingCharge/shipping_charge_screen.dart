@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/view/SubCategory/add_sub_category.dart';
-import 'package:liqueur_brooze/view/SubCategory/all_sub_category.dart';
+import 'package:liqueur_brooze/view/ShippingCharge/add_shipping_screen.dart';
 
-class SubCategoryScreen extends StatelessWidget {
-  const SubCategoryScreen({super.key});
+class ShippingChargeScreen extends StatelessWidget {
+  const ShippingChargeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +10,11 @@ class SubCategoryScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         children: [
-          /// Add Sub Category Button
+          /// Add Shipping Charge Button
           InkWell(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddSubCategory()));
+                  MaterialPageRoute(builder: (context) => AddShippingScreen()));
             },
             child: Container(
               height: 55,
@@ -46,7 +45,7 @@ class SubCategoryScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Add Sub Category',
+                    'Add Shipping Charge',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -59,11 +58,11 @@ class SubCategoryScreen extends StatelessWidget {
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-          /// All Sub Category Button
+          /// All Shipping Charge Button
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AllSubCategory()));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => AllSubCategory()));
             },
             child: Container(
               height: 55,
@@ -94,7 +93,7 @@ class SubCategoryScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'All Sub Category',
+                    'All Shipping Charge',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

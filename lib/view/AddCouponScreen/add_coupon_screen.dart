@@ -13,7 +13,6 @@ class AddCouponScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final addCouponProvider = Provider.of<AddcouponProvider>(context);
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

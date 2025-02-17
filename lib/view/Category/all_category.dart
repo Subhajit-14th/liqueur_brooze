@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 
-class AllSubCategory extends StatelessWidget {
-  const AllSubCategory({super.key});
+class AllCategory extends StatelessWidget {
+  const AllCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class AllSubCategory extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Sub Category",
+          "Category",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -30,33 +30,19 @@ class AllSubCategory extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'All Sub Category',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Monserat',
-                      ),
-                    ),
-                    Text(
-                      'Manage your All SubCategory',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: 'Monserat',
-                      ),
-                    ),
-                  ],
+                Text(
+                  'All Category',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Monserat',
+                  ),
                 ),
                 CommonButton(
                   width: 130,
                   height: 40,
-                  buttonText: 'Add Sub Category',
+                  buttonText: 'Add Category',
                   buttonTextFontSize: 12,
                   buttonColor: AppColor.primaryColor,
                   onTap: () {},
@@ -93,6 +79,29 @@ class AllSubCategory extends StatelessWidget {
                       child: Row(
                         spacing: 18,
                         children: [
+                          Column(
+                            children: [
+                              Text(
+                                'SL',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Monserat',
+                                ),
+                              ),
+                              Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Monserat',
+                                ),
+                              ),
+                            ],
+                          ),
+
                           /// Coupon Type Or Coupon Code
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,32 +118,6 @@ class AllSubCategory extends StatelessWidget {
                               ),
                               Text(
                                 'Category Name',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          /// Sub category name
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /// Value
-                              Text(
-                                'Sub Category',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                              Text(
-                                'Subcategory Name',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
