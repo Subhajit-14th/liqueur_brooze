@@ -1,4 +1,4 @@
-name: Flutter CI/CD
+name: Liquere Brooze CI/CD
 
 on:
   push:
