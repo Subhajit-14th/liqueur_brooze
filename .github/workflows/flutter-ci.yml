@@ -23,8 +23,17 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Extract App Name from pubspec.yaml
+        id: app_name
+        run: |
+          APP_NAME=$(grep 'name:' pubspec.yaml | head -n 1 | awk '{print $2}')
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+
       - name: Build Apk
         run: flutter build apk --release
+
+      - name: Rename APK File
+        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/${{ env.APP_NAME }}-release.apk
 
       - name: Install Google Drive API Client
         run: pip install --upgrade google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
@@ -40,6 +49,7 @@ jobs:
           from googleapiclient.http import MediaFileUpload
           from google.oauth2 import service_account
           import json
+          import os
 
           SCOPES = ["https://www.googleapis.com/auth/drive.file"]
           SERVICE_ACCOUNT_FILE = "creds.json"
@@ -48,11 +58,15 @@ jobs:
           credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
           service = build("drive", "v3", credentials=credentials)
 
+          app_name = os.getenv("APP_NAME")
+          file_name = f"{app_name}-release.apk"
+          file_path = f"build/app/outputs/flutter-apk/{file_name}"
+
           file_metadata = {
-              "name": "app-release.apk",
+              "name": file_name,
               "parents": [FOLDER_ID]
           }
-          media = MediaFileUpload("build/app/outputs/flutter-apk/app-release.apk", mimetype="application/vnd.android.package-archive")
+          media = MediaFileUpload(file_path, mimetype="application/vnd.android.package-archive")
           file = service.files().create(body=file_metadata, media_body=media, fields="id").execute()
 
           print("Uploaded APK File ID:", file.get("id"))
