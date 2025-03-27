@@ -27,7 +27,7 @@ class _CommonPasswordFieldState extends State<CommonPasswordField> {
       obscureText: isNotShow,
       cursorColor: AppColor.darkTextColor,
       style: const TextStyle(
-        color: AppColor.lightTextColor,
+        color: AppColor.darkTextColor,
       ),
       decoration: InputDecoration(
         hintText: widget.hintText,

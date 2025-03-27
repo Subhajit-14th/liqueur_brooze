@@ -3,8 +3,8 @@ import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_passwordfield.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_textfield.dart';
-import 'package:liqueur_brooze/view/MainRouteScreen/main_route_screen.dart';
 import 'package:liqueur_brooze/viewModel/auth_provider.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -83,110 +83,136 @@ class _LoginScreenState extends State<LoginScreen>
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 18, right: 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: height * 0.06),
-            // Header with orange background
-            Image.asset(
-              'assets/app_logo/app_logo.png',
-              scale: 2,
-            ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 18, right: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: height * 0.06),
+                  // Header with orange background
+                  Image.asset(
+                    'assets/app_logo/app_logo.png',
+                    scale: 2,
+                  ),
 
-            /// Welcome Text
-            RichText(
-              text: TextSpan(
-                text: 'Welcome! \n',
-                style: TextStyle(
-                  fontSize: 28,
-                  color: Colors.black,
-                  fontFamily: 'Monserat',
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'to ',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 28,
-                      fontFamily: 'Monserat',
+                  /// Welcome Text
+                  RichText(
+                    text: TextSpan(
+                      text: 'Welcome! \n',
+                      style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.black,
+                        fontFamily: 'Monserat',
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'to ',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 28,
+                            fontFamily: 'Monserat',
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Liquor Brooze',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  TextSpan(
-                    text: 'Liquor Brooze',
+                  SizedBox(height: height * 0.05),
+
+                  /// Email Textfield
+                  SlideTransition(
+                    position: _emailAnimation,
+                    child: AnimatedOpacity(
+                      opacity: _isVisible ? 1.0 : 0.0,
+                      duration: const Duration(seconds: 2),
+                      child: CommonTextField(
+                        controller: context.read<AuthProvider>().emailContoller,
+                        hintText: 'Enter your email',
+                        labelText: 'Email',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  /// Password Textfield
+                  SlideTransition(
+                    position: _passwordAnimation,
+                    child: AnimatedOpacity(
+                      opacity: _isVisible ? 1.0 : 0.0,
+                      duration: const Duration(seconds: 2),
+                      child: CommonPasswordField(
+                        controller:
+                            context.read<AuthProvider>().passwordController,
+                        hintText: 'Enter your password',
+                        labelText: 'Password',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.05),
+
+                  // Login Button
+                  SlideTransition(
+                    position: _buttonAnimation,
+                    child: AnimatedOpacity(
+                      opacity: _isVisible ? 1.0 : 0.0,
+                      duration: const Duration(seconds: 2),
+                      child: CommonButton(
+                        buttonText: 'Login',
+                        onTap: () {
+                          context.read<AuthProvider>().login(context);
+                        },
+                        width: width / 1.4,
+                        buttonColor: AppColor.secondaryColor,
+                        borderRadius: 50,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.02),
+
+                  /// I forgot my password button
+                  Text(
+                    'I forgot my password',
                     style: TextStyle(
+                      color: AppColor.secondaryColor,
                       fontWeight: FontWeight.bold,
-                      color: AppColor.primaryColor,
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: height * 0.05),
+          ),
 
-            /// Email Textfield
-            SlideTransition(
-              position: _emailAnimation,
-              child: AnimatedOpacity(
-                opacity: _isVisible ? 1.0 : 0.0,
-                duration: const Duration(seconds: 2),
-                child: CommonTextField(
-                  controller: context.read<AuthProvider>().emailContoller,
-                  hintText: 'Enter your email',
-                  labelText: 'Email',
+          /// Loading Indicator Overlay
+          if (context.watch<AuthProvider>().isLoading)
+            Container(
+              height: height,
+              width: width,
+              color: Colors.black.withAlpha(50), // Dim background
+              child: const Center(
+                child: SizedBox(
+                  height: 80,
+                  width: 80,
+                  child: LoadingIndicator(
+                    indicatorType: Indicator.ballZigZag,
+                    colors: [AppColor.primaryColor, AppColor.secondaryColor],
+                    strokeWidth: 2,
+                    backgroundColor: Colors.transparent,
+                    pathBackgroundColor: Colors.black,
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-
-            /// Password Textfield
-            SlideTransition(
-              position: _passwordAnimation,
-              child: AnimatedOpacity(
-                opacity: _isVisible ? 1.0 : 0.0,
-                duration: const Duration(seconds: 2),
-                child: CommonPasswordField(
-                  controller: context.read<AuthProvider>().passwordController,
-                  hintText: 'Enter your password',
-                  labelText: 'Password',
-                ),
-              ),
-            ),
-            SizedBox(height: height * 0.05),
-
-            // Login Button
-            SlideTransition(
-              position: _buttonAnimation,
-              child: AnimatedOpacity(
-                opacity: _isVisible ? 1.0 : 0.0,
-                duration: const Duration(seconds: 2),
-                child: CommonButton(
-                  buttonText: 'Login',
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MainRouteScreen()));
-                  },
-                  width: width / 1.4,
-                  buttonColor: AppColor.secondaryColor,
-                  borderRadius: 50,
-                ),
-              ),
-            ),
-            SizedBox(height: height * 0.02),
-
-            /// I forgot my password button
-            Text(
-              'I forgot my password',
-              style: TextStyle(
-                color: AppColor.secondaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
