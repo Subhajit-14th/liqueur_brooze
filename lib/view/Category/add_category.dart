@@ -45,7 +45,7 @@ class AddCategoryScreen extends StatelessWidget {
             CommonTextField(
               labelText: 'Enter Category',
               hintText: 'enter category name',
-              controller: addCategoryProvider.categoryController,
+              controller: addCategoryProvider.categoryNameController,
             ),
             SizedBox(height: height * 0.02),
 

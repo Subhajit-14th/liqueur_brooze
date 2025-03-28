@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
+import 'package:liqueur_brooze/viewModel/add_category_provider.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:provider/provider.dart';
 
-class AllCategory extends StatelessWidget {
+class AllCategory extends StatefulWidget {
   const AllCategory({super.key});
+
+  @override
+  State<AllCategory> createState() => _AllCategoryState();
+}
+
+class _AllCategoryState extends State<AllCategory> {
+  @override
+  void initState() {
+    super.initState();
+
+    /// Call getCategoryList when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AddCategoryProvider>(context, listen: false)
+          .getCategoryList(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,109 +71,126 @@ class AllCategory extends StatelessWidget {
           ),
 
           /// Coupon Lists
-          Expanded(
-            child: ListView.builder(
-              itemCount: 10,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              padding: EdgeInsets.all(16),
-              itemBuilder: (context, index) {
-                return Stack(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      padding: EdgeInsets.all(10),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(50),
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        spacing: 18,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                'SL',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                              Text(
-                                '${index + 1}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          /// Coupon Type Or Coupon Code
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /// Coupon Type
-                              Text(
-                                'Category',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                              Text(
-                                'Category Name',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Monserat',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: AppColor.primaryColor,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(14),
-                              bottomLeft: Radius.circular(10),
+          Consumer<AddCategoryProvider>(builder: (context, provider, child) {
+            if (provider.isLoading) {
+              return const Center(
+                child: SizedBox(
+                  height: 80,
+                  width: 80,
+                  child: LoadingIndicator(
+                    indicatorType: Indicator.ballZigZag,
+                    colors: [AppColor.primaryColor, AppColor.secondaryColor],
+                    strokeWidth: 2,
+                    backgroundColor: Colors.transparent,
+                    pathBackgroundColor: Colors.black,
+                  ),
+                ),
+              );
+            }
+            return Expanded(
+              child: ListView.builder(
+                itemCount: provider.allCategories?.length,
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                padding: EdgeInsets.all(16),
+                itemBuilder: (context, index) {
+                  return Stack(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 16),
+                        padding: EdgeInsets.all(10),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(50),
+                              blurRadius: 10,
+                              spreadRadius: 1,
                             ),
-                          ),
-                          child: Icon(
-                            Icons.delete_outline_rounded,
-                            color: Colors.white,
+                          ],
+                        ),
+                        child: Row(
+                          spacing: 18,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  'SL',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Monserat',
+                                  ),
+                                ),
+                                Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Monserat',
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            /// Coupon Type Or Coupon Code
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                /// Coupon Type
+                                Text(
+                                  'Category',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Monserat',
+                                  ),
+                                ),
+                                Text(
+                                  '${provider.allCategories?[index].catagoryname}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Monserat',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColor.primaryColor,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(14),
+                                bottomLeft: Radius.circular(10),
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.delete_outline_rounded,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
+                    ],
+                  );
+                },
+              ),
+            );
+          }),
         ],
       ),
     );

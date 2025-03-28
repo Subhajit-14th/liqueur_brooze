@@ -52,19 +52,11 @@ class AdminDrawer extends StatelessWidget {
               },
             ),
             DrawerItem(
-              icon: Icons.receipt_long_rounded,
-              text: 'Sub Category',
-              onTap: () {
-                Navigator.pop(context);
-                routerProvider.setPageIndex(3);
-              },
-            ),
-            DrawerItem(
               icon: Icons.account_balance_wallet_rounded,
               text: 'Product',
               onTap: () {
                 Navigator.pop(context);
-                routerProvider.setPageIndex(4);
+                routerProvider.setPageIndex(3);
               },
             ),
             DrawerItem(
@@ -72,7 +64,7 @@ class AdminDrawer extends StatelessWidget {
               text: 'User',
               onTap: () {
                 Navigator.pop(context);
-                routerProvider.setPageIndex(5);
+                routerProvider.setPageIndex(4);
               },
             ),
             DrawerItem(
@@ -80,7 +72,7 @@ class AdminDrawer extends StatelessWidget {
               text: 'Coupon',
               onTap: () {
                 Navigator.pop(context);
-                routerProvider.setPageIndex(6);
+                routerProvider.setPageIndex(5);
               },
             ),
             DrawerItem(
@@ -88,7 +80,7 @@ class AdminDrawer extends StatelessWidget {
               text: 'Shipping Charge',
               onTap: () {
                 Navigator.pop(context);
-                routerProvider.setPageIndex(7);
+                routerProvider.setPageIndex(6);
               },
             ),
             DrawerItem(
