@@ -30,98 +30,104 @@ class AuthControllers {
       debugPrint('My response is: ${response.data}');
       loginApiResModel = LoginApiResModel.fromJson(response.data);
     } on PlatformException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "Platform Error $e",
-            style: TextStyle(
-              color: Colors.white, // Text color
-              fontWeight: FontWeight.bold,
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Platform Error $e",
+              style: TextStyle(
+                color: Colors.white, // Text color
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: AppColor.secondaryColor,
+            duration: Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+              bottom: 50,
+              left: 20,
+              right: 20,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 10,
+            action: SnackBarAction(
+              label: 'Close',
+              textColor: Colors.white,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
             ),
           ),
-          backgroundColor: AppColor.secondaryColor,
-          duration: Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(
-            bottom: 50,
-            left: 20,
-            right: 20,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 10,
-          action: SnackBarAction(
-            label: 'Close',
-            textColor: Colors.white,
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
+        );
+      }
     } on DioException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "Dio Exception: $e",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Dio Exception: $e",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: AppColor.secondaryColor,
+            duration: Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+              bottom: 50,
+              left: 20,
+              right: 20,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 10,
+            action: SnackBarAction(
+              label: 'Close',
+              textColor: Colors.white,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
             ),
           ),
-          backgroundColor: AppColor.secondaryColor,
-          duration: Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(
-            bottom: 50,
-            left: 20,
-            right: 20,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 10,
-          action: SnackBarAction(
-            label: 'Close',
-            textColor: Colors.white,
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "My Login Api Error is: $e",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "My Login Api Error is: $e",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: AppColor.secondaryColor,
+            duration: Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+              bottom: 50,
+              left: 20,
+              right: 20,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 10,
+            action: SnackBarAction(
+              label: 'Close',
+              textColor: Colors.white,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
             ),
           ),
-          backgroundColor: AppColor.secondaryColor,
-          duration: Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(
-            bottom: 50,
-            left: 20,
-            right: 20,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 10,
-          action: SnackBarAction(
-            label: 'Close',
-            textColor: Colors.white,
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
+        );
+      }
     }
     return loginApiResModel;
   }

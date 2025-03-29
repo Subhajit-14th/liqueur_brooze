@@ -29,4 +29,9 @@ class HiveDatabase {
   static String getAccessToken() {
     return HiveDatabase.box.get(HiveKeys.accessToken) ?? '';
   }
+
+  /// Clear All Hive Data
+  static void clearAllData() {
+    HiveDatabase.box.clear(); // Clears all data from the Hive box
+  }
 }

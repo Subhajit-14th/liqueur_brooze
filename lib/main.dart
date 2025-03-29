@@ -69,7 +69,9 @@ class MyApp extends StatelessWidget {
           Locale('fr', ''),
           Locale('de', ''),
         ],
-        home: authProvider.isAuthenticated ? MainRouteScreen() : LoginScreen(),
+        home: authProvider.isAuthenticated
+            ? const MainRouteScreen()
+            : const LoginScreen(),
       );
     });
   }

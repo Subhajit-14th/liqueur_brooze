@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
+import 'package:liqueur_brooze/view/Category/add_category.dart';
+import 'package:liqueur_brooze/view/Category/update_category_screen.dart';
 import 'package:liqueur_brooze/viewModel/add_category_provider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +66,12 @@ class _AllCategoryState extends State<AllCategory> {
                   buttonText: 'Add Category',
                   buttonTextFontSize: 12,
                   buttonColor: AppColor.primaryColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddCategoryScreen()));
+                  },
                 ),
               ],
             ),
@@ -94,98 +101,115 @@ class _AllCategoryState extends State<AllCategory> {
                 shrinkWrap: true,
                 padding: EdgeInsets.all(16),
                 itemBuilder: (context, index) {
-                  return Stack(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 16),
-                        padding: EdgeInsets.all(10),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withAlpha(50),
-                              blurRadius: 10,
-                              spreadRadius: 1,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          spacing: 18,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  'SL',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Monserat',
-                                  ),
-                                ),
-                                Text(
-                                  '${index + 1}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Monserat',
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            /// Coupon Type Or Coupon Code
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                /// Coupon Type
-                                Text(
-                                  'Category',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Monserat',
-                                  ),
-                                ),
-                                Text(
-                                  '${provider.allCategories?[index].catagoryname}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Monserat',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: AppColor.primaryColor,
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(14),
-                                bottomLeft: Radius.circular(10),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UpdateCategoryScreen(
+                                    categoryId:
+                                        "${provider.allCategories?[index].sId}",
+                                    categoryName:
+                                        "${provider.allCategories?[index].catagoryname}",
+                                  )));
+                    },
+                    highlightColor: Colors.transparent,
+                    child: Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.all(10),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(14),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(50),
+                                blurRadius: 10,
+                                spreadRadius: 1,
                               ),
-                            ),
-                            child: Icon(
-                              Icons.delete_outline_rounded,
-                              color: Colors.white,
+                            ],
+                          ),
+                          child: Row(
+                            spacing: 18,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    'SL',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Monserat',
+                                    ),
+                                  ),
+                                  Text(
+                                    '${index + 1}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Monserat',
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              /// Coupon Type Or Coupon Code
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  /// Coupon Type
+                                  Text(
+                                    'Category',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Monserat',
+                                    ),
+                                  ),
+                                  Text(
+                                    '${provider.allCategories?[index].catagoryname}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Monserat',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            _showDeleteDialog(context,
+                                "${provider.allCategories?[index].sId}");
+                          },
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: AppColor.primaryColor,
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(14),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.delete_outline_rounded,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               ),
@@ -193,6 +217,58 @@ class _AllCategoryState extends State<AllCategory> {
           }),
         ],
       ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, String categoryId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Delete Category",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Monserat',
+            ),
+          ),
+          content: Text(
+            "Are you sure you want to delete this category?",
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: 'Monserat',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Monserat',
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Provider.of<AddCategoryProvider>(context, listen: false)
+                    .deleteCategory(context, categoryId);
+                Navigator.of(context).pop(); // Close the dialog after deleting
+              },
+              child: Text(
+                "Yes",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontFamily: 'Monserat',
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

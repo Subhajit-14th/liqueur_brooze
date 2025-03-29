@@ -26,16 +26,22 @@ class AuthProvider extends ChangeNotifier {
     _checkAuthentication();
   }
 
+  /// Public method to check authentication and navigate to login if needed
+  void checkAuthAndRedirect() {
+    _checkAuthentication();
+  }
+
   /// Check if user is authenticated by checking stored access token
   Future<void> _checkAuthentication() async {
     debugPrint('Check the auth token');
     String? token = HiveDatabase.getAccessToken(); // Fetch token from Hive
     if (token.isNotEmpty) {
       _isAuthenticated = true;
+      notifyListeners();
     } else {
       _isAuthenticated = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   /// login function
@@ -85,41 +91,7 @@ class AuthProvider extends ChangeNotifier {
     );
 
     if (_loginApiResModel.success == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "${_loginApiResModel.message}",
-            style: TextStyle(
-              color: Colors.white, // Text color
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: AppColor.secondaryColor,
-          duration: Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(
-            bottom: 50,
-            left: 20,
-            right: 20,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 10,
-          action: SnackBarAction(
-            label: 'Close',
-            textColor: Colors.white,
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            },
-          ),
-        ),
-      );
-      HiveDatabase.saveAccessToken(accessToken: '${_loginApiResModel.token}');
-      _checkAuthentication();
-      _isLoading = false;
-    } else {
-      if (_loginApiResModel.message != null) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -151,7 +123,52 @@ class AuthProvider extends ChangeNotifier {
           ),
         );
       }
+      HiveDatabase.saveAccessToken(accessToken: '${_loginApiResModel.token}');
+      _checkAuthentication();
+      _isLoading = false;
+    } else {
+      if (_loginApiResModel.message != null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "${_loginApiResModel.message}",
+                style: TextStyle(
+                  color: Colors.white, // Text color
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              backgroundColor: AppColor.secondaryColor,
+              duration: Duration(seconds: 3),
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.only(
+                bottom: 50,
+                left: 20,
+                right: 20,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 10,
+              action: SnackBarAction(
+                label: 'Close',
+                textColor: Colors.white,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+            ),
+          );
+        }
+      }
       _isLoading = false;
     }
+  }
+
+  // Optional: Logout function to clear token
+  Future<void> logout() async {
+    HiveDatabase.clearAllData(); // Clear token
+    _isAuthenticated = false;
+    notifyListeners(); // Switch back to LoginScreen automatically
   }
 }
