@@ -237,7 +237,9 @@ class DashboardScreen extends StatelessWidget {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (context) => CouponDeleteDialog(),
+                        builder: (context) => CouponDeleteDialog(
+                          couponId: '',
+                        ),
                       );
                     },
                     child: Align(

@@ -1,14 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_textfield.dart';
 import 'package:liqueur_brooze/viewModel/addcoupon_provider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
-class AddCouponScreen extends StatelessWidget {
-  const AddCouponScreen({super.key});
+class EditCouponScreen extends StatefulWidget {
+  const EditCouponScreen(
+      {super.key,
+      required this.updatedCouponType,
+      required this.updaedCouponCode,
+      required this.updaedCouponValue,
+      required this.updaedCouponStartDate,
+      required this.updaedCouponEndDate,
+      required this.couponId});
+
+  final String couponId;
+  final String updatedCouponType;
+  final String updaedCouponCode;
+  final String updaedCouponValue;
+  final String updaedCouponStartDate;
+  final String updaedCouponEndDate;
+
+  @override
+  State<EditCouponScreen> createState() => _EditCouponScreenState();
+}
+
+class _EditCouponScreenState extends State<EditCouponScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<AddcouponProvider>(context, listen: false)
+        .setUpdatedCouponType(_capitalize(widget.updatedCouponType));
+
+    Provider.of<AddcouponProvider>(context, listen: false)
+        .updatedCouponCodeController
+        .text = widget.updaedCouponCode;
+    Provider.of<AddcouponProvider>(context, listen: false)
+        .updateValueController
+        .text = widget.updaedCouponValue;
+    Provider.of<AddcouponProvider>(context, listen: false)
+        .updatedStartDateController
+        .text = widget.updaedCouponStartDate;
+    Provider.of<AddcouponProvider>(context, listen: false)
+        .updateEndDateController
+        .text = widget.updaedCouponEndDate;
+  }
+
+  String _capitalize(String text) {
+    if (text.isEmpty) return text; // Return empty if the string is empty
+    return text[0].toUpperCase() + text.substring(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +63,7 @@ class AddCouponScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Add Coupon",
+          "Edit Coupon",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -62,7 +106,7 @@ class AddCouponScreen extends StatelessWidget {
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: addCouponProvider.selectedCouponType,
+                        value: addCouponProvider.selectedUpdateCouponType,
                         hint: const Text("Select coupon type"),
                         items: addCouponProvider.couponType.map((String item) {
                           return DropdownMenuItem<String>(
@@ -72,7 +116,7 @@ class AddCouponScreen extends StatelessWidget {
                         }).toList(),
                         onChanged: (String? newValue) {
                           if (newValue != null) {
-                            addCouponProvider.setCouponType(newValue);
+                            addCouponProvider.setUpdatedCouponType(newValue);
                           }
                         },
                       ),
@@ -93,7 +137,7 @@ class AddCouponScreen extends StatelessWidget {
                   CommonTextField(
                     labelText: 'Enter coupon code',
                     hintText: 'enter cpupon code',
-                    controller: addCouponProvider.couponCodeController,
+                    controller: addCouponProvider.updatedCouponCodeController,
                   ),
                   SizedBox(height: height * 0.02),
 
@@ -110,7 +154,7 @@ class AddCouponScreen extends StatelessWidget {
                   CommonTextField(
                     labelText: 'Enter value',
                     hintText: 'enter value',
-                    controller: addCouponProvider.valueController,
+                    controller: addCouponProvider.updateValueController,
                   ),
                   SizedBox(height: height * 0.02),
 
@@ -127,7 +171,7 @@ class AddCouponScreen extends StatelessWidget {
                   CommonTextField(
                     labelText: 'Start Date',
                     hintText: 'Start Date',
-                    controller: addCouponProvider.startDateController,
+                    controller: addCouponProvider.updatedStartDateController,
                     suffixIconData: Icons.calendar_month_rounded,
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
@@ -141,7 +185,7 @@ class AddCouponScreen extends StatelessWidget {
                       if (pickedDate != null) {
                         String formattedDate =
                             DateFormat('dd/MM/yyyy').format(pickedDate);
-                        addCouponProvider.setStartDate(formattedDate);
+                        addCouponProvider.setUpdateStartDate(formattedDate);
                       }
                     },
                   ),
@@ -160,7 +204,7 @@ class AddCouponScreen extends StatelessWidget {
                   CommonTextField(
                     labelText: 'End Date',
                     hintText: 'End Date',
-                    controller: addCouponProvider.endDateController,
+                    controller: addCouponProvider.updateEndDateController,
                     suffixIconData: Icons.calendar_month_rounded,
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
@@ -174,7 +218,7 @@ class AddCouponScreen extends StatelessWidget {
                       if (pickedDate != null) {
                         String formattedDate =
                             DateFormat('dd/MM/yyyy').format(pickedDate);
-                        addCouponProvider.setEndDate(formattedDate);
+                        addCouponProvider.setUpdateEndDate(formattedDate);
                       }
                     },
                   ),
@@ -183,36 +227,38 @@ class AddCouponScreen extends StatelessWidget {
                   /// Add Coupon Button
                   CommonButton(
                     width: double.infinity,
-                    buttonText: 'Add Coupon',
+                    buttonText: 'Edit Coupon',
                     buttonColor: AppColor.primaryColor,
                     buttonTextFontSize: 16,
                     onTap: () {
-                      DateTime startDateTime = DateFormat("dd/MM/yyyy")
-                          .parse(addCouponProvider.startDateController.text);
+                      DateTime startDateTime = DateFormat("dd/MM/yyyy").parse(
+                          addCouponProvider.updatedStartDateController.text);
                       String startDate =
                           startDateTime.toUtc().toIso8601String();
-                      DateTime endDateTime = DateFormat("dd/MM/yyyy")
-                          .parse(addCouponProvider.endDateController.text);
+                      DateTime endDateTime = DateFormat("dd/MM/yyyy").parse(
+                          addCouponProvider.updateEndDateController.text);
                       String endDate = endDateTime.toUtc().toIso8601String();
 
                       var body = {
                         "type":
-                            "${addCouponProvider.selectedCouponType?.toLowerCase()}",
-                        "code": addCouponProvider.couponCodeController.text,
-                        "value": addCouponProvider.valueController.text,
+                            "${addCouponProvider.selectedUpdateCouponType?.toLowerCase()}",
+                        "code":
+                            addCouponProvider.updatedCouponCodeController.text,
+                        "value": addCouponProvider.updateValueController.text,
                         "starting_date": startDate,
                         "ending_date": endDate
                       };
                       debugPrint('Code: $body');
 
-                      addCouponProvider.addCoupon(
+                      addCouponProvider.updateCoupon(
                           context: context,
+                          couponId: widget.couponId,
                           couponType:
-                              "${addCouponProvider.selectedCouponType?.toLowerCase()}",
-                          couponCode:
-                              addCouponProvider.couponCodeController.text,
-                          couponValue:
-                              int.parse(addCouponProvider.valueController.text),
+                              "${addCouponProvider.selectedUpdateCouponType?.toLowerCase()}",
+                          couponCode: addCouponProvider
+                              .updatedCouponCodeController.text,
+                          couponValue: int.parse(
+                              addCouponProvider.updateValueController.text),
                           startDate: startDate,
                           endDate: endDate);
                     },
@@ -223,7 +269,7 @@ class AddCouponScreen extends StatelessWidget {
           ),
 
           /// Loading Indicator Overlay
-          if (context.watch<AddcouponProvider>().isAddCoupon)
+          if (context.watch<AddcouponProvider>().isUpdateCoupon)
             Container(
               height: height,
               width: width,

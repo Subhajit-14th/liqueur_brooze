@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
+import 'package:liqueur_brooze/viewModel/addcoupon_provider.dart';
+import 'package:provider/provider.dart';
 
 class CouponDeleteDialog extends StatelessWidget {
-  const CouponDeleteDialog({super.key});
+  const CouponDeleteDialog({super.key, required this.couponId});
+
+  final String couponId;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,12 @@ class CouponDeleteDialog extends StatelessWidget {
                           buttonText: 'Yes',
                           buttonTextFontSize: 16,
                           buttonColor: AppColor.secondaryColor,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pop(context);
+                            context
+                                .read<AddcouponProvider>()
+                                .deleteCoupon(context, couponId);
+                          },
                         ),
                       ),
                     ],

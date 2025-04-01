@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/view/AddCouponScreen/add_coupon_screen.dart';
+import 'package:liqueur_brooze/view/AddCouponScreen/all_coupon_screen.dart';
 
 class CouponScreen extends StatelessWidget {
   const CouponScreen({super.key});
@@ -61,8 +62,8 @@ class CouponScreen extends StatelessWidget {
           /// All Coupon Button
           InkWell(
             onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => AllSubCategory()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AllCouponScreen()));
             },
             child: Container(
               height: 55,
