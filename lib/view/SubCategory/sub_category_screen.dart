@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:liqueur_brooze/view/SubCategory/add_sub_category.dart';
 import 'package:liqueur_brooze/view/SubCategory/all_sub_category.dart';
 
 class SubCategoryScreen extends StatelessWidget {
@@ -14,7 +15,10 @@ class SubCategoryScreen extends StatelessWidget {
 
           /// Add Sub Category Button
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddSubCategory()));
+            },
             child: Container(
               height: 55,
               padding: EdgeInsets.symmetric(horizontal: 16),

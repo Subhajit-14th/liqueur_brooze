@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/view/Pages/add_pages_screen.dart';
+import 'package:liqueur_brooze/view/Pages/all_pages_screen.dart';
 
 class PagesScreen extends StatelessWidget {
   const PagesScreen({super.key});
@@ -61,8 +62,8 @@ class PagesScreen extends StatelessWidget {
           /// All Pages Button
           InkWell(
             onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => AllSubCategory()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AllPagesScreen()));
             },
             child: Container(
               height: 55,

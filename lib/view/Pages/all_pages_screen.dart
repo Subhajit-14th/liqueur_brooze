@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
-import 'package:liqueur_brooze/view/SubCategory/add_sub_category.dart';
-import 'package:liqueur_brooze/view/SubCategory/edit_sub_category.dart';
-import 'package:liqueur_brooze/viewModel/add_sub_category_provider.dart';
+import 'package:liqueur_brooze/view/Pages/add_pages_screen.dart';
+import 'package:liqueur_brooze/view/Pages/edit_pages_screen.dart';
+import 'package:liqueur_brooze/viewModel/add_page_provider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
-class AllSubCategory extends StatefulWidget {
-  const AllSubCategory({super.key});
+class AllPagesScreen extends StatefulWidget {
+  const AllPagesScreen({super.key});
 
   @override
-  State<AllSubCategory> createState() => _AllSubCategoryState();
+  State<AllPagesScreen> createState() => _AllPagesScreenState();
 }
 
-class _AllSubCategoryState extends State<AllSubCategory> {
+class _AllPagesScreenState extends State<AllPagesScreen> {
   @override
   void initState() {
     super.initState();
 
     /// Call getCategoryList when page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AddSubCategoryProvider>(context, listen: false)
-          .getAllSubCategory(context);
+      Provider.of<AddPageProvider>(context, listen: false).getAllPages(context);
     });
   }
 
@@ -32,7 +31,7 @@ class _AllSubCategoryState extends State<AllSubCategory> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Sub Category",
+          "All Pages",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -45,56 +44,41 @@ class _AllSubCategoryState extends State<AllSubCategory> {
       ),
       body: Column(
         children: [
-          /// Heading items and add coupon buttons
+          /// Heading items and add pages buttons
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'All Sub Category',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Monserat',
-                      ),
-                    ),
-                    Text(
-                      'Manage your All SubCategory',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: 'Monserat',
-                      ),
-                    ),
-                  ],
+                Text(
+                  'All Pages',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Monserat',
+                  ),
                 ),
                 CommonButton(
                   width: 130,
                   height: 40,
-                  buttonText: 'Add Sub Category',
+                  buttonText: 'Add Pages',
                   buttonTextFontSize: 12,
                   buttonColor: AppColor.primaryColor,
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddSubCategory()));
+                            builder: (context) => AddPagesScreen()));
                   },
                 ),
               ],
             ),
           ),
 
-          /// Coupon Lists
-          Consumer<AddSubCategoryProvider>(
-              builder: (context, subCategoryProvider, child) {
-            if (subCategoryProvider.isSubCategoryLoad) {
+          /// All Pages List
+          Consumer<AddPageProvider>(builder: (context, provider, child) {
+            if (provider.isPageLoad) {
               return const Center(
                 child: SizedBox(
                   height: 80,
@@ -111,7 +95,7 @@ class _AllSubCategoryState extends State<AllSubCategory> {
             }
             return Expanded(
               child: ListView.builder(
-                itemCount: subCategoryProvider.allSubCategory?.length,
+                itemCount: provider.allPages?.length,
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 padding: EdgeInsets.all(16),
@@ -121,17 +105,15 @@ class _AllSubCategoryState extends State<AllSubCategory> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EditSubCategoryScreen(
-                                    categoryName:
-                                        "${subCategoryProvider.allSubCategory?[index].category?.catagoryname}",
-                                    categoryNameId:
-                                        "${subCategoryProvider.allSubCategory?[index].category?.sId}",
-                                    subCategoryname:
-                                        "${subCategoryProvider.allSubCategory?[index].name}",
-                                    subCategoryId:
-                                        "${subCategoryProvider.allSubCategory?[index].sId}",
+                              builder: (context) => EditPagesScreen(
+                                    pageId: '${provider.allPages?[index].sId}',
+                                    pageTitleName:
+                                        "${provider.allPages?[index].title}",
+                                    pageDescription:
+                                        "${provider.allPages?[index].description}",
                                   )));
                     },
+                    highlightColor: Colors.transparent,
                     child: Stack(
                       children: [
                         Container(
@@ -151,14 +133,12 @@ class _AllSubCategoryState extends State<AllSubCategory> {
                           ),
                           child: Row(
                             spacing: 18,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              /// Coupon Type Or Coupon Code
                               Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  /// Coupon Type
                                   Text(
-                                    'Category',
+                                    'SL',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -167,7 +147,7 @@ class _AllSubCategoryState extends State<AllSubCategory> {
                                     ),
                                   ),
                                   Text(
-                                    '${subCategoryProvider.allSubCategory?[index].category?.catagoryname}',
+                                    '${index + 1}',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -178,38 +158,68 @@ class _AllSubCategoryState extends State<AllSubCategory> {
                                 ],
                               ),
 
-                              /// Sub category name
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  /// Value
-                                  Text(
-                                    'Sub Category',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Monserat',
+                              /// Page Name
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    /// Coupon Type
+                                    Text(
+                                      'Pages',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Monserat',
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    '${subCategoryProvider.allSubCategory?[index].name}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Monserat',
+                                    Text(
+                                      '${provider.allPages?[index].title}',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Monserat',
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(height: 10),
+
+                                    /// Page description
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        /// Coupon Type
+                                        Text(
+                                          'Description',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Monserat',
+                                          ),
+                                        ),
+                                        Text(
+                                          '${provider.allPages?[index].description}',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Monserat',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
                         InkWell(
                           onTap: () {
-                            _showDeleteDialog(context,
-                                "${subCategoryProvider.allSubCategory?[index].sId}");
+                            _showDeleteDialog(
+                                context, "${provider.allPages?[index].sId}");
                           },
                           child: Align(
                             alignment: Alignment.topRight,
@@ -241,20 +251,20 @@ class _AllSubCategoryState extends State<AllSubCategory> {
     );
   }
 
-  void _showDeleteDialog(BuildContext context, String subCategoryId) {
+  void _showDeleteDialog(BuildContext context, String pagesId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Delete SubCategory",
+            "Delete Pages",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontFamily: 'Monserat',
             ),
           ),
           content: Text(
-            "Are you sure you want to delete this SubCategory?",
+            "Are you sure you want to delete this page?",
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Monserat',
@@ -275,8 +285,8 @@ class _AllSubCategoryState extends State<AllSubCategory> {
             ),
             TextButton(
               onPressed: () {
-                Provider.of<AddSubCategoryProvider>(context, listen: false)
-                    .deleteSubCategory(context, subCategoryId);
+                Provider.of<AddPageProvider>(context, listen: false)
+                    .deletePage(context, pagesId);
                 Navigator.of(context).pop(); // Close the dialog after deleting
               },
               child: Text(

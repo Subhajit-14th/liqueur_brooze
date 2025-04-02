@@ -1,55 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
-import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
-import 'package:liqueur_brooze/view/AddCouponScreen/add_coupon_screen.dart';
-import 'package:liqueur_brooze/view/DashboardScreen/coupon_delete_dialog.dart';
+import 'package:liqueur_brooze/viewModel/dashboard_screen_provider.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:provider/provider.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    /// Call get dashboard data api when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<DashboardScreenProvider>(context, listen: false)
+          .getDashboardData(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        children: [
-          SizedBox(height: 16),
-          buildDashboardCard(
-            title: "Sales",
-            subtitle: "Today",
-            value: "145",
-            percentage: "12%",
-            percentageColor: Colors.green,
-            icon: Icons.shopping_cart,
-            iconColor: Colors.blue,
-            changeText: "increase",
+    var width = MediaQuery.of(context).size.width;
+    return Consumer<DashboardScreenProvider>(
+        builder: (context, dashboardProvider, child) {
+      if (dashboardProvider.isDashboardLoad) {
+        return Container(
+          height: height,
+          width: width,
+          color: Colors.black.withAlpha(50), // Dim background
+          child: const Center(
+            child: SizedBox(
+              height: 80,
+              width: 80,
+              child: LoadingIndicator(
+                indicatorType: Indicator.ballZigZag,
+                colors: [AppColor.primaryColor, AppColor.secondaryColor],
+                strokeWidth: 2,
+                backgroundColor: Colors.transparent,
+                pathBackgroundColor: Colors.black,
+              ),
+            ),
           ),
-          SizedBox(height: 16), // Add spacing between cards
-          buildDashboardCard(
-            title: "Revenue",
-            subtitle: "This Month",
-            value: "\$3,264",
-            percentage: "8%",
-            percentageColor: Colors.green,
-            icon: Icons.attach_money,
-            iconColor: Colors.green,
-            changeText: "increase",
-          ),
-          SizedBox(height: 16),
-          buildDashboardCard(
-            title: "Customers",
-            subtitle: "This Year",
-            value: "1244",
-            percentage: "12%",
-            percentageColor: Colors.red,
-            icon: Icons.people,
-            iconColor: Colors.orange,
-            changeText: "decrease",
-          ),
-        ],
-      ),
-    );
+        );
+      }
+      return Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        child: Column(
+          children: [
+            SizedBox(height: 16),
+            buildDashboardCard(
+              title: "Sales",
+              subtitle: "Today",
+              value:
+                  "${dashboardProvider.dashboardApiResModel.data?.sales?.amount}",
+              percentage:
+                  "${dashboardProvider.dashboardApiResModel.data?.sales?.percentage}",
+              percentageColor: Colors.green,
+              icon: Icons.shopping_cart,
+              iconColor: Colors.blue,
+              changeText: "increase",
+            ),
+            SizedBox(height: 16), // Add spacing between cards
+            buildDashboardCard(
+              title: "Revenue",
+              subtitle: "This Month",
+              value:
+                  "${dashboardProvider.dashboardApiResModel.data?.revenue?.amount}",
+              percentage:
+                  "${dashboardProvider.dashboardApiResModel.data?.revenue?.percentage}",
+              percentageColor: Colors.green,
+              icon: Icons.attach_money,
+              iconColor: Colors.green,
+              changeText: "increase",
+            ),
+            SizedBox(height: 16),
+            buildDashboardCard(
+              title: "Customers",
+              subtitle: "This Year",
+              value:
+                  "${dashboardProvider.dashboardApiResModel.data?.totalCustomers?.amount}",
+              percentage:
+                  "${dashboardProvider.dashboardApiResModel.data?.totalCustomers?.percentage}",
+              percentageColor: Colors.red,
+              icon: Icons.people,
+              iconColor: Colors.orange,
+              changeText: "decrease",
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget buildDashboardCard({

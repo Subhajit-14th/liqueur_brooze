@@ -6,7 +6,7 @@ import 'package:liqueur_brooze/view/LoginScreen/login_screen.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/view/MainRouteScreen/main_route_screen.dart';
 import 'package:liqueur_brooze/viewModel/add_category_provider.dart';
-import 'package:liqueur_brooze/viewModel/add_page_screen.dart';
+import 'package:liqueur_brooze/viewModel/add_page_provider.dart';
 import 'package:liqueur_brooze/viewModel/add_sub_category_provider.dart';
 import 'package:liqueur_brooze/viewModel/addcoupon_provider.dart';
 import 'package:liqueur_brooze/viewModel/auth_provider.dart';
@@ -40,7 +40,7 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (context) => AddSubCategoryProvider()),
     ChangeNotifierProvider(create: (context) => AddCategoryProvider()),
     ChangeNotifierProvider(create: (context) => ShippingChargesProvider()),
-    ChangeNotifierProvider(create: (context) => AddPageScreen()),
+    ChangeNotifierProvider(create: (context) => AddPageProvider()),
   ], child: const MyApp()));
 }
 

@@ -7,19 +7,43 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
-class AddPagesScreen extends StatelessWidget {
-  const AddPagesScreen({super.key});
+class EditPagesScreen extends StatefulWidget {
+  const EditPagesScreen(
+      {super.key,
+      required this.pageId,
+      required this.pageTitleName,
+      required this.pageDescription});
+
+  final String pageId;
+  final String pageTitleName;
+  final String pageDescription;
+
+  @override
+  State<EditPagesScreen> createState() => _EditPagesScreenState();
+}
+
+class _EditPagesScreenState extends State<EditPagesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<AddPageProvider>(context, listen: false)
+        .updateTitleController
+        .text = widget.pageTitleName;
+    Provider.of<AddPageProvider>(context, listen: false)
+        .updateQuillController
+        .document = quill.Document()..insert(0, widget.pageDescription);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final addPagesProvider = Provider.of<AddPageProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final addPagesProvider = Provider.of<AddPageProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Add Page",
+          "Edit Page",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -51,7 +75,7 @@ class AddPagesScreen extends StatelessWidget {
                   CommonTextField(
                     labelText: 'Enter Title',
                     hintText: 'enter title',
-                    controller: addPagesProvider.titleController,
+                    controller: addPagesProvider.updateTitleController,
                   ),
                   SizedBox(height: height * 0.02),
 
@@ -75,32 +99,34 @@ class AddPagesScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: quill.QuillEditor.basic(
-                      controller: addPagesProvider.quillController,
+                      controller: addPagesProvider.updateQuillController,
                     ),
                   ),
 
                   /// Text Editor
                   quill.QuillSimpleToolbar(
-                    controller: addPagesProvider.quillController,
+                    controller: addPagesProvider.updateQuillController,
                     config: const quill.QuillSimpleToolbarConfig(),
                   ),
 
                   /// Add Buttons
                   CommonButton(
                     width: double.infinity,
-                    buttonText: 'Add',
+                    buttonText: 'Update',
                     buttonColor: AppColor.primaryColor,
                     buttonTextFontSize: 16,
                     onTap: () {
                       debugPrint(
-                          'My title is: ${addPagesProvider.titleController.text}');
+                          'My title is: ${addPagesProvider.updateTitleController.text}');
                       debugPrint(
-                          'My description is: ${addPagesProvider.quillController.document.toPlainText()}');
-                      context.read<AddPageProvider>().addPages(
-                          context,
-                          addPagesProvider.titleController.text,
-                          addPagesProvider.quillController.document
-                              .toPlainText());
+                          'My description is: ${addPagesProvider.updateQuillController.document.toPlainText()}');
+                      context.read<AddPageProvider>().updatePage(
+                            context,
+                            widget.pageId,
+                            addPagesProvider.updateTitleController.text,
+                            addPagesProvider.updateQuillController.document
+                                .toPlainText(),
+                          );
                     },
                   ),
                 ],
@@ -109,7 +135,7 @@ class AddPagesScreen extends StatelessWidget {
           ),
 
           /// Loading Indicator Overlay
-          if (context.watch<AddPageProvider>().isPagesAdded)
+          if (context.watch<AddPageProvider>().isPagesUpdate)
             Container(
               height: height,
               width: width,

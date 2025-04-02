@@ -29,11 +29,11 @@ class CommonTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(
-          color: AppColor.secondaryColor,
+          color: AppColor.darkTextColor,
         ),
         labelText: labelText,
         labelStyle: const TextStyle(
-          color: AppColor.secondaryColor,
+          color: AppColor.darkTextColor,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.never,
         focusColor: Colors.black,

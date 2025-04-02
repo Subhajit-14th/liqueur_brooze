@@ -163,6 +163,7 @@ class AuthProvider extends ChangeNotifier {
       }
       _isLoading = false;
     }
+    notifyListeners();
   }
 
   // Optional: Logout function to clear token
