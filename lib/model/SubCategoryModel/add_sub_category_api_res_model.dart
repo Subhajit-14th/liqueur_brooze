@@ -26,8 +26,8 @@ class Data {
   String? sId;
   String? name;
   String? category;
-  int? createdAt;
-  int? updatedAt;
+  String? createdAt;
+  String? updatedAt;
 
   Data({this.sId, this.name, this.category, this.createdAt, this.updatedAt});
 

@@ -6,8 +6,32 @@ import 'package:liqueur_brooze/viewModel/shipping_charges_provider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
-class AddShippingScreen extends StatelessWidget {
-  const AddShippingScreen({super.key});
+class EditShippingScreen extends StatefulWidget {
+  const EditShippingScreen(
+      {super.key,
+      required this.shippingChargeId,
+      required this.newPincode,
+      required this.newShippingAmount});
+
+  final String shippingChargeId;
+  final String newPincode;
+  final String newShippingAmount;
+
+  @override
+  State<EditShippingScreen> createState() => _EditShippingScreenState();
+}
+
+class _EditShippingScreenState extends State<EditShippingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ShippingChargesProvider>(context, listen: false)
+        .updatePinCodeController
+        .text = widget.newPincode;
+    Provider.of<ShippingChargesProvider>(context, listen: false)
+        .updateShippingController
+        .text = widget.newShippingAmount;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +42,7 @@ class AddShippingScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Add Shipping",
+          "Edit Shipping",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -49,7 +73,7 @@ class AddShippingScreen extends StatelessWidget {
                 CommonTextField(
                   labelText: 'Enter Pin Code',
                   hintText: 'enter pin code',
-                  controller: shippingProvider.pinCodeController,
+                  controller: shippingProvider.updatePinCodeController,
                 ),
                 SizedBox(height: height * 0.02),
 
@@ -66,21 +90,22 @@ class AddShippingScreen extends StatelessWidget {
                 CommonTextField(
                   labelText: 'Enter Shipping Amount',
                   hintText: 'enter shipping amount',
-                  controller: shippingProvider.shippingController,
+                  controller: shippingProvider.updateShippingController,
                 ),
                 SizedBox(height: height * 0.02),
 
                 /// Add Shipping Button
                 CommonButton(
                   width: double.infinity,
-                  buttonText: 'Submit',
+                  buttonText: 'Update',
                   buttonColor: AppColor.primaryColor,
                   buttonTextFontSize: 16,
                   onTap: () {
-                    shippingProvider.addShippingCharge(
+                    shippingProvider.updateShippingCharge(
                         context,
-                        shippingProvider.pinCodeController.text,
-                        shippingProvider.shippingController.text);
+                        widget.shippingChargeId,
+                        shippingProvider.updatePinCodeController.text,
+                        shippingProvider.updateShippingController.text);
                   },
                 ),
               ],
@@ -88,7 +113,7 @@ class AddShippingScreen extends StatelessWidget {
           ),
 
           /// Loading Indicator Overlay
-          if (context.watch<ShippingChargesProvider>().isAddShipping)
+          if (context.watch<ShippingChargesProvider>().isUpdateShipping)
             Container(
               height: height,
               width: width,

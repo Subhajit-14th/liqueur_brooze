@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:liqueur_brooze/view/ShippingCharge/add_shipping_screen.dart';
-import 'package:liqueur_brooze/view/ShippingCharge/all_shipping_charge_screen.dart';
+import 'package:liqueur_brooze/view/ProductScreen/add_product_screen.dart';
+import 'package:liqueur_brooze/view/ProductScreen/all_product_screen.dart';
 
-class ShippingChargeScreen extends StatelessWidget {
-  const ShippingChargeScreen({super.key});
+class ProductScreen extends StatelessWidget {
+  const ProductScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +11,11 @@ class ShippingChargeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         children: [
-          /// Add Shipping Charge Button
+          /// Add Pages Button
           InkWell(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddShippingScreen()));
+                  MaterialPageRoute(builder: (context) => AddProductScreen()));
             },
             child: Container(
               height: 55,
@@ -46,7 +46,7 @@ class ShippingChargeScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Add Shipping Charge',
+                    'Add Product',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -59,13 +59,11 @@ class ShippingChargeScreen extends StatelessWidget {
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
 
-          /// All Shipping Charge Button
+          /// All Pages Button
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AllShippingChargeScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AllProductScreen()));
             },
             child: Container(
               height: 55,
@@ -96,7 +94,7 @@ class ShippingChargeScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'All Shipping Charge',
+                    'All Product',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

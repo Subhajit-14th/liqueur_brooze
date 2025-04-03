@@ -4,6 +4,7 @@ import 'package:liqueur_brooze/view/Category/category_screen.dart';
 import 'package:liqueur_brooze/view/DashboardScreen/dashboard_screen.dart';
 import 'package:liqueur_brooze/view/Drawer/admin_panel.dart';
 import 'package:liqueur_brooze/view/Pages/pages_screen.dart';
+import 'package:liqueur_brooze/view/ProductScreen/product_screen.dart';
 import 'package:liqueur_brooze/view/ShippingCharge/shipping_charge_screen.dart';
 import 'package:liqueur_brooze/view/SubCategory/sub_category_screen.dart';
 import 'package:liqueur_brooze/viewModel/router_provider.dart';
@@ -36,11 +37,7 @@ class MainRouteScreen extends StatelessWidget {
         PagesScreen(),
         CategoryScreen(),
         SubCategoryScreen(),
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.green,
-        ),
+        ProductScreen(),
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
