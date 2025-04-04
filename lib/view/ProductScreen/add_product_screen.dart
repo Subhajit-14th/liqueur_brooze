@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_textfield.dart';
+import 'package:liqueur_brooze/view/ProductScreen/attributes_screen.dart';
 import 'package:liqueur_brooze/viewModel/add_category_provider.dart';
 import 'package:liqueur_brooze/viewModel/add_sub_category_provider.dart';
 import 'package:liqueur_brooze/viewModel/product_provider.dart';
@@ -336,6 +337,57 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                       SizedBox(height: height * 0.02),
                     ],
+
+                    if (context.watch<ProductProvider>().productVariation ==
+                        "Variable") ...[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 10,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                /// Attribute Name
+                                Text(
+                                  'Attribute Name',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Monserat',
+                                  ),
+                                ),
+                                SizedBox(height: height * 0.01),
+                                CommonTextField(
+                                  labelText: 'Enter attribute name',
+                                  hintText: 'enter attribute name',
+                                  controller:
+                                      productProvider.attributeNameController,
+                                ),
+                                SizedBox(height: height * 0.02),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: CommonButton(
+                              width: 100,
+                              buttonText: 'Add',
+                              buttonColor: AppColor.primaryColor,
+                              buttonTextFontSize: 16,
+                              onTap: () {
+                                if (productProvider
+                                    .attributeNameController.text.isNotEmpty) {
+                                  productProvider.addAttribute();
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      AttributesScreen(),
+                    ],
+                    SizedBox(height: height * 0.02),
 
                     /// Product Image
                     Text(

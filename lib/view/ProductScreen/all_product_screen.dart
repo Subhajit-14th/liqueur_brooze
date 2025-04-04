@@ -5,6 +5,7 @@ import 'package:liqueur_brooze/view/Pages/add_pages_screen.dart';
 import 'package:liqueur_brooze/viewModel/product_provider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class AllProductScreen extends StatefulWidget {
   const AllProductScreen({super.key});
@@ -101,72 +102,65 @@ class _AllProductScreenState extends State<AllProductScreen> {
                 shrinkWrap: true,
                 padding: EdgeInsets.all(16),
                 itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => EditShippingScreen(
-                      //               shippingChargeId:
-                      //                   "${provider.allShipping?[index].sId}",
-                      //               newPincode:
-                      //                   "${provider.allShipping?[index].pincode}",
-                      //               newShippingAmount:
-                      //                   "${provider.allShipping?[index].shippingAmount}",
-                      //             )));
-                    },
-                    highlightColor: Colors.transparent,
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      padding: EdgeInsets.all(14),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(50),
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /// Product image
-                          Image.network(
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.all(14),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(100),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                          offset: Offset(2, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// Product Image
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
                             provider.allProducts?[index].productImage ?? '',
                             height: 140,
                             width: double.infinity,
+                            fit: BoxFit.fill,
                             errorBuilder: (context, error, stackTrace) {
                               return Image.network(
                                 'https://static.thenounproject.com/png/509537-200.png',
                                 height: 140,
                                 width: double.infinity,
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               );
                             },
                           ),
+                        ),
+                        SizedBox(height: 10),
 
-                          /// Product name and Reguler Price
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
+                        /// Product Name & Regular Price
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Product Name",
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.black.withAlpha(180),
                                       fontSize: 14,
-                                      fontWeight: FontWeight.normal,
+                                      fontWeight: FontWeight.w500,
                                       fontFamily: 'Monserat',
                                     ),
                                   ),
                                   Text(
-                                    "${provider.allProducts?[index].productName}",
+                                    provider.allProducts?[index].productName ??
+                                        '',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18,
@@ -176,49 +170,49 @@ class _AllProductScreenState extends State<AllProductScreen> {
                                   ),
                                 ],
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Reguler Price",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Monserat',
-                                    ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Regular Price",
+                                  style: TextStyle(
+                                    color: Colors.black.withAlpha(180),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Monserat',
                                   ),
-
-                                  /// Reguler Price name
-                                  Text(
-                                    "Rs. ${provider.allProducts?[index].regulerPrice}",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Monserat',
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
+                                ),
+                                Text(
+                                  "£ ${provider.allProducts?[index].regulerPrice}",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Monserat',
+                                    decoration: TextDecoration.lineThrough,
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: height * 0.01),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
 
-                          /// SKU name
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
+                        /// SKU & Discount Price
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "SKU",
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.black.withAlpha(180),
                                       fontSize: 14,
-                                      fontWeight: FontWeight.normal,
+                                      fontWeight: FontWeight.w500,
                                       fontFamily: 'Monserat',
                                     ),
                                   ),
@@ -226,62 +220,132 @@ class _AllProductScreenState extends State<AllProductScreen> {
                                     provider.allProducts?[index].sku ?? '',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Monserat',
                                     ),
                                   ),
                                 ],
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  /// Discount Price name
-                                  Text(
-                                    "Discount Price",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Monserat',
-                                    ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Discount Price",
+                                  style: TextStyle(
+                                    color: Colors.black.withAlpha(180),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Monserat',
                                   ),
-                                  Text(
-                                    "Rs. ${provider.allProducts?[index].discountPrice}",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Monserat',
-                                    ),
+                                ),
+                                Text(
+                                  "£ ${provider.allProducts?[index].discountPrice}",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Monserat',
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: height * 0.01),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
 
-                          /// variation name
-                          Text(
-                            "Variation",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'Monserat',
-                            ),
+                        /// Variation
+                        Text(
+                          "Variation",
+                          style: TextStyle(
+                            color: Colors.black.withAlpha(180),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Monserat',
                           ),
-                          Text(
-                            provider.allProducts?[index].variation ?? '',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Monserat',
-                            ),
+                        ),
+                        Text(
+                          provider.allProducts?[index].variation ?? '',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Monserat',
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 10),
+
+                        /// Buttons (View, Edit, Delete)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Handle View Action
+                                  showProductDetailsDialog(
+                                      context, provider.allProducts?[index]);
+                                  debugPrint(
+                                      "${provider.allProducts?[index].attributes}");
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                ),
+                                child: Text(
+                                  "View",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Handle Edit Action
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.orange,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                ),
+                                child: Text(
+                                  "Edit",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Handle Delete Action
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                ),
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -290,6 +354,205 @@ class _AllProductScreenState extends State<AllProductScreen> {
           }),
         ],
       ),
+    );
+  }
+
+  void showProductDetailsDialog(BuildContext context, dynamic product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9, // Set a fixed width
+            padding: EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize:
+                    MainAxisSize.min, // Ensures it wraps content properly
+                children: [
+                  /// Product Image
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      product.productImage ?? '',
+                      height: 180,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.network(
+                          'https://static.thenounproject.com/png/509537-200.png',
+                          height: 180,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
+
+                  /// Product Name
+                  Text(
+                    "Product Name: ${product.productName}",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+
+                  /// SKU
+                  Text(
+                    "SKU: ${product.sku}",
+                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  ),
+                  SizedBox(height: 8),
+
+                  /// Regular Price
+                  Text(
+                    "Regular Price: £ ${product.regulerPrice}",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+
+                  /// Discount Price
+                  Text(
+                    "Discount Price: £ ${product.discountPrice}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+
+                  /// Variation
+                  Text(
+                    "Variation: ${product.variation}",
+                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  ),
+                  SizedBox(height: 16),
+
+                  /// Attributes Table
+                  Text(
+                    "Attributes:",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+
+                  Table(
+                    border: TableBorder.all(color: Colors.black, width: 1),
+                    columnWidths: const {
+                      0: FlexColumnWidth(2),
+                      1: FlexColumnWidth(2),
+                      2: FlexColumnWidth(1),
+                      3: FlexColumnWidth(1),
+                      4: FlexColumnWidth(1),
+                    },
+                    children: [
+                      /// Table Header
+                      TableRow(
+                        decoration: BoxDecoration(color: Colors.grey[300]),
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Att 1",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Att 2",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Price",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Discount",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Stock",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+
+                      /// Table Rows (Dynamic)
+                      ...product.attributes.map<TableRow>((attr) {
+                        return TableRow(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(attr.att1 ?? ''),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(attr.att2 ?? ''),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                  attr.otherAttributes?.price.toString() ?? ''),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(attr.otherAttributes?.discountPrice
+                                      .toString() ??
+                                  ''),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                  attr.otherAttributes?.stock.toString() ?? ''),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+
+                  /// Description
+                  Text(
+                    "Description:",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Html(
+                    data: product.description ?? "", // Render HTML content
+                    style: {
+                      "body": Style(fontSize: FontSize.medium),
+                      "p": Style(color: Colors.black87),
+                      "strong": Style(fontWeight: FontWeight.bold),
+                    },
+                  ),
+
+                  /// Close Button
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Close dialog
+                      },
+                      child: Text(
+                        "Close",
+                        style: TextStyle(color: Colors.red, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
