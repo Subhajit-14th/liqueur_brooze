@@ -69,7 +69,7 @@ class AddSubCategoryProvider extends ChangeNotifier {
   }
 
   /// get all sub category
-  void getAllSubCategory(context) async {
+  Future<void> getAllSubCategory(context) async {
     _isSubCategoryLoad = true;
     notifyListeners();
     _allSubCategoryApiResModel =

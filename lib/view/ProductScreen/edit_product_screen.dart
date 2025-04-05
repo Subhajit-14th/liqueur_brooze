@@ -1,34 +1,133 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_textfield.dart';
-import 'package:liqueur_brooze/view/ProductScreen/attributes_screen.dart';
+import 'package:liqueur_brooze/view/ProductScreen/edit_attribute_screen.dart';
 import 'package:liqueur_brooze/viewModel/add_category_provider.dart';
 import 'package:liqueur_brooze/viewModel/add_sub_category_provider.dart';
-import 'package:liqueur_brooze/viewModel/product_provider.dart';
+import 'package:liqueur_brooze/viewModel/edit_product_provider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:liqueur_brooze/model/ProductModel/all_product_api_res_model.dart'
+    as allproduct;
 
-class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({super.key});
+class EditProductScreen extends StatefulWidget {
+  const EditProductScreen(
+      {super.key,
+      required this.editProductName,
+      required this.editProductCategoryId,
+      required this.editProductSubCategoryId,
+      required this.editProductSKUId,
+      required this.editProductVariation,
+      required this.editProductRegulerPriceField,
+      required this.editProductDiscountPriceField,
+      required this.editProductStockField,
+      required this.editProductDescription,
+      required this.editProductImageUrl,
+      required this.editProductGalleryUrls,
+      required this.attributes,
+      required this.productId});
+
+  final String productId;
+  final String editProductName;
+  final String editProductCategoryId;
+  final String editProductSubCategoryId;
+  final String editProductSKUId;
+  final String editProductVariation;
+  final String editProductRegulerPriceField;
+  final String editProductDiscountPriceField;
+  final String editProductStockField;
+  final String editProductDescription;
+  final String editProductImageUrl;
+  final List<String> editProductGalleryUrls;
+  final List<allproduct.Attributes> attributes;
 
   @override
-  State<AddProductScreen> createState() => _AddProductScreenState();
+  State<EditProductScreen> createState() => _EditProductScreenState();
 }
 
-class _AddProductScreenState extends State<AddProductScreen> {
+class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void initState() {
     super.initState();
 
-    /// Call getCategoryList when page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AddCategoryProvider>(context, listen: false)
-          .getCategoryList(context);
-      Provider.of<AddSubCategoryProvider>(context, listen: false)
-          .getAllSubCategory(context);
+    debugPrint("📜 This function is hit");
+
+    final provider = Provider.of<EditProductProvider>(context, listen: false);
+
+    provider.productNameController.text = widget.editProductName;
+    provider.skuIdController.text = widget.editProductSKUId;
+    provider.regularPriceController.text = widget.editProductRegulerPriceField;
+    provider.discountPriceController.text =
+        widget.editProductDiscountPriceField;
+    provider.stockController.text = widget.editProductStockField;
+    provider.quillController.document = quill.Document()
+      ..insert(0, widget.editProductDescription);
+    provider.setExistingProductImageUrl(widget.editProductImageUrl);
+    provider.setExistingProductGalleryUrls(widget.editProductGalleryUrls);
+
+    /// 🧠 Delay this part that calls notifyListeners
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      provider.selectedProductVariation(widget.editProductVariation);
+
+      if (widget.attributes.isNotEmpty) {
+        provider.setEditCombinationsFromModel(widget.attributes);
+      }
+
+      final categoryProvider =
+          Provider.of<AddCategoryProvider>(context, listen: false);
+      final subCategoryProvider =
+          Provider.of<AddSubCategoryProvider>(context, listen: false);
+
+      await categoryProvider.getCategoryList(context);
+      await subCategoryProvider.getAllSubCategory(context);
+
+      // final matchedCategory = categoryProvider.allCategories?.firstWhere(
+      //   (cat) => cat.sId == widget.editProductCategoryId,
+      // );
+
+      // final matchedSubCategory = subCategoryProvider.allSubCategory?.firstWhere(
+      //   (subCat) => subCat.sId == widget.editProductSubCategoryId,
+      //   orElse: () => null,
+      // );
+
+      dynamic matchedCategory;
+      try {
+        matchedCategory = categoryProvider.allCategories?.firstWhere(
+          (cat) => cat.sId == widget.editProductCategoryId,
+        );
+      } catch (e) {
+        matchedCategory = null;
+      }
+
+      dynamic matchedSubCategory;
+      try {
+        matchedSubCategory = subCategoryProvider.allSubCategory?.firstWhere(
+          (subCat) => subCat.sId == widget.editProductSubCategoryId,
+        );
+      } catch (e) {
+        matchedSubCategory = null;
+      }
+
+      if (matchedCategory != null) {
+        provider.setCategoryValueAndId(
+          matchedCategory.catagoryname ?? '',
+          matchedCategory.sId ?? '',
+        );
+
+        provider.filterSubCategories(
+          matchedCategory.sId!,
+          subCategoryProvider.allSubCategory ?? [],
+        );
+      }
+
+      if (matchedSubCategory != null) {
+        provider.setSubCategoryValueAndId(
+          matchedSubCategory.name,
+          matchedSubCategory.sId,
+        );
+      }
     });
   }
 
@@ -36,12 +135,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    final productProvider = Provider.of<ProductProvider>(context);
+    final editProductProvider = Provider.of<EditProductProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Add Product",
+          "Edit Product",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -72,7 +171,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -89,7 +187,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         CommonTextField(
                           labelText: 'Enter Title',
                           hintText: 'enter title',
-                          controller: productProvider.productNameController,
+                          controller: editProductProvider.productNameController,
                         ),
                         SizedBox(height: height * 0.02),
 
@@ -107,7 +205,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           height: 60, // Increase this height if needed
                           child: DropdownButtonFormField<String>(
                             value: context
-                                .read<ProductProvider>()
+                                .read<EditProductProvider>()
                                 .selectedCategoryValue,
                             hint: const Text("Choose a category"),
                             items: context
@@ -133,7 +231,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       category.catagoryname == value);
                               if (selectedCategory != null) {
                                 context
-                                    .read<ProductProvider>()
+                                    .read<EditProductProvider>()
                                     .setCategoryValueAndId(
                                       selectedCategory.catagoryname!,
                                       selectedCategory.sId!,
@@ -141,7 +239,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                                 /// Filter subcategories based on the selected category
                                 context
-                                    .read<ProductProvider>()
+                                    .read<EditProductProvider>()
                                     .filterSubCategories(
                                       selectedCategory.sId!,
                                       context
@@ -152,7 +250,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                                 // Reset subcategory selection
                                 context
-                                    .read<ProductProvider>()
+                                    .read<EditProductProvider>()
                                     .resetSubCategory();
                               }
                             },
@@ -183,11 +281,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           height: 60,
                           child: DropdownButtonFormField<String>(
                             value: context
-                                .read<ProductProvider>()
+                                .read<EditProductProvider>()
                                 .selectedAddSubCategoryValue,
                             hint: const Text("Choose a sub category"),
                             items: context
-                                .read<ProductProvider>()
+                                .read<EditProductProvider>()
                                 .filteredSubCategory
                                 ?.map((category) {
                               return DropdownMenuItem<String>(
@@ -209,7 +307,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       (category) => category.name == value);
                               if (selectedSubCategory != null) {
                                 context
-                                    .read<ProductProvider>()
+                                    .read<EditProductProvider>()
                                     .setSubCategoryValueAndId(
                                       selectedSubCategory.name,
                                       selectedSubCategory.sId,
@@ -242,7 +340,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         CommonTextField(
                           labelText: 'Enter sku',
                           hintText: 'enter sku',
-                          controller: productProvider.skuIdController,
+                          controller: editProductProvider.skuIdController,
                         ),
                         SizedBox(height: height * 0.02),
 
@@ -260,7 +358,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           height: 60,
                           child: DropdownButtonFormField<String>(
                             value: context
-                                .read<ProductProvider>()
+                                .read<EditProductProvider>()
                                 .productVariation,
                             hint: const Text("Choose a sub category"),
                             items: ["Simple", "Variable"].map((String value) {
@@ -277,7 +375,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             }).toList(),
                             onChanged: (value) {
                               context
-                                  .read<ProductProvider>()
+                                  .read<EditProductProvider>()
                                   .selectedProductVariation(value);
                             },
                             decoration: InputDecoration(
@@ -294,7 +392,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         SizedBox(height: height * 0.02),
 
                         /// if product variation is simple selected
-                        if (context.watch<ProductProvider>().productVariation ==
+                        if (context
+                                .watch<EditProductProvider>()
+                                .productVariation ==
                             "Simple") ...[
                           /// Regular Field
                           Text(
@@ -309,7 +409,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           CommonTextField(
                             labelText: 'Enter regular price',
                             hintText: 'enter regular price',
-                            controller: productProvider.regularPriceController,
+                            controller:
+                                editProductProvider.regularPriceController,
                           ),
                           SizedBox(height: height * 0.02),
 
@@ -326,7 +427,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           CommonTextField(
                             labelText: 'Enter discount price',
                             hintText: 'enter discount price',
-                            controller: productProvider.discountPriceController,
+                            controller:
+                                editProductProvider.discountPriceController,
                           ),
                           SizedBox(height: height * 0.02),
 
@@ -343,12 +445,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           CommonTextField(
                             labelText: 'Enter stock',
                             hintText: 'enter stock',
-                            controller: productProvider.stockController,
+                            controller: editProductProvider.stockController,
                           ),
                           SizedBox(height: height * 0.02),
                         ],
 
-                        if (context.watch<ProductProvider>().productVariation ==
+                        if (context
+                                .watch<EditProductProvider>()
+                                .productVariation ==
                             "Variable") ...[
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -372,8 +476,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     CommonTextField(
                                       labelText: 'Enter attribute name',
                                       hintText: 'enter attribute name',
-                                      controller: productProvider
-                                          .attributeNameController,
+                                      controller: editProductProvider
+                                          .editAttributeNameController,
                                     ),
                                     SizedBox(height: height * 0.02),
                                   ],
@@ -386,18 +490,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   buttonColor: AppColor.primaryColor,
                                   buttonTextFontSize: 16,
                                   onTap: () {
-                                    if (productProvider.attributeNameController
-                                        .text.isNotEmpty) {
-                                      productProvider.addAttribute();
+                                    if (editProductProvider
+                                        .editAttributeNameController
+                                        .text
+                                        .isNotEmpty) {
+                                      editProductProvider
+                                          .addEditProductAttribute();
                                     }
                                   },
                                 ),
                               ),
                             ],
                           ),
-                          AttributesScreen(),
+                          EditAttributeScreen(),
                         ],
-                        SizedBox(height: height * 0.02),
 
                         /// Product Image
                         Text(
@@ -422,7 +528,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              productProvider.pickImage();
+                              editProductProvider.pickImage();
                             },
                             child: Row(
                               children: [
@@ -457,7 +563,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   ),
                                 ),
                                 Text(
-                                  productProvider.productImageName,
+                                  editProductProvider.productImageName,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -470,11 +576,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ),
                         ),
                         SizedBox(height: height * 0.01),
-                        productProvider.selectedImage != null
+                        editProductProvider.selectedImage != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(14),
-                                child:
-                                    Image.file(productProvider.selectedImage!))
+                                child: Image.file(
+                                    editProductProvider.selectedImage!))
                             : Container(),
                         SizedBox(height: height * 0.02),
 
@@ -501,7 +607,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              productProvider.pickProductGalleryImages();
+                              editProductProvider.pickProductGalleryImages();
                             },
                             child: Row(
                               children: [
@@ -536,9 +642,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   ),
                                 ),
                                 Text(
-                                  productProvider.selectedProductGalleryImages
+                                  editProductProvider
+                                          .selectedProductGalleryImages
                                           .isNotEmpty
-                                      ? '${productProvider.selectedProductGalleryImages.length} Images Selected'
+                                      ? '${editProductProvider.selectedProductGalleryImages.length} Images Selected'
                                       : "Choose Files",
                                   style: TextStyle(
                                     color: Colors.black,
@@ -552,7 +659,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ),
                         ),
                         SizedBox(height: height * 0.01),
-                        Consumer<ProductProvider>(
+                        Consumer<EditProductProvider>(
                           builder: (context, value, child) {
                             if (value.selectedProductGalleryImages.isNotEmpty) {
                               return GridView.builder(
@@ -635,13 +742,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: quill.QuillEditor.basic(
-                            controller: productProvider.quillController,
+                            controller: editProductProvider.quillController,
                           ),
                         ),
 
                         /// Text Editor
                         quill.QuillSimpleToolbar(
-                          controller: productProvider.quillController,
+                          controller: editProductProvider.quillController,
                           config: const quill.QuillSimpleToolbarConfig(),
                         ),
                         SizedBox(height: height * 0.02),
@@ -649,73 +756,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         /// Add Buttons
                         CommonButton(
                           width: double.infinity,
-                          buttonText: 'Add',
+                          buttonText: 'Update',
                           buttonColor: AppColor.primaryColor,
                           buttonTextFontSize: 16,
                           onTap: () async {
-                            if (productProvider
+                            if (editProductProvider
                                     .productNameController.text.isNotEmpty &&
-                                productProvider
+                                editProductProvider
                                     .skuIdController.text.isNotEmpty) {
-                              /// Build list of MultipartFile from gallery images
-                              List<MultipartFile> imageFiles = [];
-                              for (var file in productProvider
-                                  .selectedProductGalleryImages) {
-                                imageFiles.add(
-                                  await MultipartFile.fromFile(
-                                    file.path,
-                                    filename: file.path.split('/').last,
-                                  ),
-                                );
-                              }
-
-                              // Optional: Add main product image as first item or separate field
-                              if (productProvider.selectedImage != null) {
-                                imageFiles.insert(
-                                  0,
-                                  await MultipartFile.fromFile(
-                                    productProvider.selectedImage!.path,
-                                    filename: productProvider
-                                        .selectedImage!.path
-                                        .split('/')
-                                        .last,
-                                  ),
-                                );
-                              }
-
-                              // List<String> imagePaths = productProvider
-                              //     .selectedProductGalleryImages
-                              //     .map((f) => f.path)
-                              //     .toList();
-
-                              // if (productProvider.selectedImage != null) {
-                              //   imagePaths.insert(
-                              //       0, productProvider.selectedImage!.path);
-                              // }
-
-                              Map<String, dynamic> data = {
-                                'files': imageFiles,
-                                'product_name':
-                                    productProvider.productNameController.text,
-                                'category': productProvider.selectedCategoryId,
-                                'sub_category':
-                                    productProvider.selectedSubCategoryId,
-                                'sku': productProvider.skuIdController.text,
-                                'variation': productProvider.productVariation,
-                                'reguler_price':
-                                    productProvider.regularPriceController.text,
-                                'discount_price': productProvider
-                                    .discountPriceController.text,
-                                'stock': productProvider.stockController.text,
-                                'attributes':
-                                    productProvider.getFormattedCombinations(),
-                                // '[{"size": "M", "color": "Red", "other_attributes": {"price": 200, "discount_price": 180, "stock": 5}}]',
-                                'description': productProvider
-                                    .quillController.document
-                                    .toPlainText(),
-                              };
-                              debugPrint(data.toString());
-                              productProvider.addProduct(context);
+                              editProductProvider.editProduct(
+                                  context, widget.productId);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -732,7 +782,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
 
                 /// Loading Indicator Overlay
-                if (context.watch<ProductProvider>().isProductAdd)
+                if (context.watch<EditProductProvider>().isEditProductAdd)
                   Container(
                     height: height,
                     width: width,
@@ -757,5 +807,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ],
             ),
     );
+  }
+
+  @override
+  void dispose() {
+    Provider.of<EditProductProvider>(context, listen: false).resetAllFields();
+    super.dispose();
   }
 }

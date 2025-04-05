@@ -40,7 +40,7 @@ class AddCategoryProvider extends ChangeNotifier {
   bool get isAddCategory => _isAddCategory;
 
   /// get category list
-  void getCategoryList(context) async {
+  Future<void> getCategoryList(context) async {
     _isLoading = true;
     notifyListeners();
     _categoryListApiResModel =

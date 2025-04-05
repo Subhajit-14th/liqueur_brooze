@@ -11,6 +11,7 @@ import 'package:liqueur_brooze/viewModel/add_sub_category_provider.dart';
 import 'package:liqueur_brooze/viewModel/addcoupon_provider.dart';
 import 'package:liqueur_brooze/viewModel/auth_provider.dart';
 import 'package:liqueur_brooze/viewModel/dashboard_screen_provider.dart';
+import 'package:liqueur_brooze/viewModel/edit_product_provider.dart';
 import 'package:liqueur_brooze/viewModel/product_provider.dart';
 import 'package:liqueur_brooze/viewModel/router_provider.dart';
 import 'package:liqueur_brooze/viewModel/shipping_charges_provider.dart';
@@ -43,6 +44,7 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (context) => ShippingChargesProvider()),
     ChangeNotifierProvider(create: (context) => AddPageProvider()),
     ChangeNotifierProvider(create: (context) => ProductProvider()),
+    ChangeNotifierProvider(create: (context) => EditProductProvider()),
   ], child: const MyApp()));
 }
 

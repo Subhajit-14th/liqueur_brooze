@@ -1,33 +1,29 @@
-class AllProductApiResModel {
+class EditProductApiResModel {
   bool? success;
   String? message;
-  List<Products>? products;
+  Product? product;
 
-  AllProductApiResModel({this.success, this.message, this.products});
+  EditProductApiResModel({this.success, this.message, this.product});
 
-  AllProductApiResModel.fromJson(Map<String, dynamic> json) {
+  EditProductApiResModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    if (json['products'] != null) {
-      products = <Products>[];
-      json['products'].forEach((v) {
-        products!.add(new Products.fromJson(v));
-      });
-    }
+    product =
+        json['product'] != null ? Product.fromJson(json['product']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['success'] = success;
     data['message'] = message;
-    if (products != null) {
-      data['products'] = products!.map((v) => v.toJson()).toList();
+    if (product != null) {
+      data['product'] = product!.toJson();
     }
     return data;
   }
 }
 
-class Products {
+class Product {
   String? sId;
   String? productName;
   String? category;
@@ -39,13 +35,8 @@ class Products {
   String? stock;
   List<Attributes>? attributes;
   String? description;
-  String? productImage;
-  List<String>? galleryImages;
-  String? createdAt;
-  String? updatedAt;
-  int? iV;
 
-  Products(
+  Product(
       {this.sId,
       this.productName,
       this.category,
@@ -56,14 +47,9 @@ class Products {
       this.discountPrice,
       this.stock,
       this.attributes,
-      this.description,
-      this.productImage,
-      this.galleryImages,
-      this.createdAt,
-      this.updatedAt,
-      this.iV});
+      this.description});
 
-  Products.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     productName = json['product_name'];
     category = json['category'];
@@ -76,15 +62,10 @@ class Products {
     if (json['attributes'] != null) {
       attributes = <Attributes>[];
       json['attributes'].forEach((v) {
-        attributes!.add(new Attributes.fromJson(v));
+        attributes!.add(Attributes.fromJson(v));
       });
     }
     description = json['description'];
-    productImage = json['productImage'];
-    galleryImages = json['galleryImages'].cast<String>();
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
@@ -102,34 +83,29 @@ class Products {
       data['attributes'] = attributes!.map((v) => v.toJson()).toList();
     }
     data['description'] = description;
-    data['productImage'] = productImage;
-    data['galleryImages'] = galleryImages;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
     return data;
   }
 }
 
 class Attributes {
-  String? att1;
-  String? att2;
+  String? size;
+  String? color;
   OtherAttributes? otherAttributes;
 
-  Attributes({this.att1, this.att2, this.otherAttributes});
+  Attributes({this.size, this.color, this.otherAttributes});
 
   Attributes.fromJson(Map<String, dynamic> json) {
-    att1 = json['att1'];
-    att2 = json['att 2'];
+    size = json['size'];
+    color = json['color'];
     otherAttributes = json['other_attributes'] != null
-        ? new OtherAttributes.fromJson(json['other_attributes'])
+        ? OtherAttributes.fromJson(json['other_attributes'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['att1'] = att1;
-    data['att 2'] = att2;
+    data['size'] = size;
+    data['color'] = color;
     if (otherAttributes != null) {
       data['other_attributes'] = otherAttributes!.toJson();
     }

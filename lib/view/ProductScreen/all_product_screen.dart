@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/utlis/widgets/common_button.dart';
-import 'package:liqueur_brooze/view/Pages/add_pages_screen.dart';
+import 'package:liqueur_brooze/view/ProductScreen/add_product_screen.dart';
+import 'package:liqueur_brooze/view/ProductScreen/edit_product_screen.dart';
 import 'package:liqueur_brooze/viewModel/product_provider.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,6 @@ class _AllProductScreenState extends State<AllProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -64,14 +64,14 @@ class _AllProductScreenState extends State<AllProductScreen> {
                 CommonButton(
                   width: 130,
                   height: 40,
-                  buttonText: 'Add Pages',
+                  buttonText: 'Add Product',
                   buttonTextFontSize: 12,
                   buttonColor: AppColor.primaryColor,
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddPagesScreen()));
+                            builder: (context) => AddProductScreen()));
                   },
                 ),
               ],
@@ -308,6 +308,45 @@ class _AllProductScreenState extends State<AllProductScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   // Handle Edit Action
+                                  debugPrint("💬 On Tap");
+                                  debugPrint(
+                                      'My attributre values are: ${provider.allProducts?[index].attributes?.first.toJson()}');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditProductScreen(
+                                                productId:
+                                                    "${provider.allProducts?[index].sId}",
+                                                editProductName:
+                                                    "${provider.allProducts?[index].productName}",
+                                                editProductCategoryId:
+                                                    "${provider.allProducts?[index].category}",
+                                                editProductSubCategoryId:
+                                                    "${provider.allProducts?[index].subCategory}",
+                                                editProductSKUId:
+                                                    "${provider.allProducts?[index].sku}",
+                                                editProductVariation:
+                                                    "${provider.allProducts?[index].variation}",
+                                                editProductRegulerPriceField:
+                                                    "${provider.allProducts?[index].regulerPrice}",
+                                                editProductDiscountPriceField:
+                                                    "${provider.allProducts?[index].discountPrice}",
+                                                editProductStockField:
+                                                    "${provider.allProducts?[index].stock}",
+                                                editProductDescription:
+                                                    "${provider.allProducts?[index].description}",
+                                                editProductImageUrl:
+                                                    "${provider.allProducts?[index].productImage}",
+                                                editProductGalleryUrls: provider
+                                                        .allProducts?[index]
+                                                        .galleryImages ??
+                                                    [],
+                                                attributes: provider
+                                                        .allProducts?[index]
+                                                        .attributes ??
+                                                    [],
+                                              )));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.orange,
@@ -328,6 +367,35 @@ class _AllProductScreenState extends State<AllProductScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   // Handle Delete Action
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("Delete Product"),
+                                        content: Text(
+                                            "Are you sure you want to delete this product?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Cancel"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Provider.of<ProductProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .deleteProduct(context,
+                                                      "${provider.allProducts?[index].sId}");
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Delete"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,

@@ -3,13 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:liqueur_brooze/controller/ProductControllers/product_controller.dart';
+import 'package:liqueur_brooze/model/ProductModel/add_product_api_res_model.dart';
 import 'package:liqueur_brooze/model/ProductModel/all_combination_model.dart';
 import 'package:liqueur_brooze/model/ProductModel/all_product_api_res_model.dart'
     as allproduct;
 import 'package:liqueur_brooze/model/ProductModel/attribute_model.dart';
+import 'package:liqueur_brooze/model/ProductModel/delete_product_api_res_model.dart';
 import 'package:liqueur_brooze/model/SubCategoryModel/all_sub_categpry_api_res_model.dart'
     as allSubCategory;
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 
 class ProductProvider extends ChangeNotifier {
   final TextEditingController _productNameController = TextEditingController();
@@ -125,10 +128,22 @@ class ProductProvider extends ChangeNotifier {
   bool _isProductLoad = false;
   bool get isProductLoad => _isProductLoad;
 
+  bool _isProductAdd = false;
+  bool get isProductAdd => _isProductAdd;
+
+  void setProductAdd(bool value) {
+    _isProductAdd = value;
+    notifyListeners();
+  }
+
   allproduct.AllProductApiResModel _allProductApiResModel =
       allproduct.AllProductApiResModel();
   List<allproduct.Products>? _allProducts = [];
   List<allproduct.Products>? get allProducts => _allProducts;
+
+  AddProductApiResModel _addProductApiResModel = AddProductApiResModel();
+  DeleteProductApiResModel _deleteProductApiResModel =
+      DeleteProductApiResModel();
 
   final ProductController _productApiControllers = ProductController();
 
@@ -149,13 +164,63 @@ class ProductProvider extends ChangeNotifier {
     _isProductLoad = true;
     notifyListeners();
     _allProductApiResModel =
-        await _productApiControllers.getAllShippingCharge(context: context);
+        await _productApiControllers.getAllProducts(context: context);
     if (_allProductApiResModel.success == true) {
       _allProducts?.clear();
       _isProductLoad = false;
       _allProducts = _allProductApiResModel.products;
     } else {
       _isProductLoad = false;
+    }
+    notifyListeners();
+  }
+
+  /// add product
+  void addProduct(context) async {
+    _isProductAdd = true;
+    notifyListeners();
+    _addProductApiResModel = await _productApiControllers.addProduct(
+        context: context,
+        productName: _productNameController.text,
+        category: _selectedCategoryId ?? "",
+        subCategory: _selectedSubCategoryId ?? "",
+        sku: _skuIdController.text,
+        variation: _productVariation ?? "Simple",
+        regulerPrice: _regularPriceController.text,
+        discountPrice: _discountPriceController.text,
+        stock: _stockController.text,
+        attributes: getFormattedCombinations(),
+        description: quillController.document.toPlainText(),
+        productImage: _selectedProductImage?.path ?? "",
+        galleryImages:
+            _selectedProductGalleryImages.map((e) => e.path).toList());
+    if (_addProductApiResModel.success == true) {
+      _isProductAdd = false;
+      getAllProducts(context);
+      _productNameController.clear();
+      _selectedCategoryId = null;
+      _selectedCategoryValue = null;
+      _selectedAddSubCategoryValue = null;
+      _selectedSubCategoryId = null;
+      _skuIdController.clear();
+      _regularPriceController.clear();
+      _discountPriceController.clear();
+      _stockController.clear();
+      _productVariation = "Simple";
+      _selectedProductImage = null;
+      _productImageName = "Choose File";
+      _selectedProductGalleryImages.clear();
+      _attributeList.clear();
+      _attributeNameController.clear();
+      _combos.clear();
+      _variations.clear();
+      _quillController.clear();
+      _quillController.document = quill.Document();
+      _filteredSubCategory?.clear();
+      showSnackBar(context, '${_addProductApiResModel.message}');
+    } else {
+      _isProductAdd = false;
+      debugPrint('Step 6 : ${_addProductApiResModel.message}');
     }
     notifyListeners();
   }
@@ -168,6 +233,23 @@ class ProductProvider extends ChangeNotifier {
       values: [],
     ));
     _attributeNameController.clear();
+    notifyListeners();
+  }
+
+  /// delete product
+  void deleteProduct(context, String productId) async {
+    _isProductLoad = true;
+    notifyListeners();
+    _deleteProductApiResModel = await _productApiControllers.deleteProduct(
+        context: context, productId: productId);
+    if (_deleteProductApiResModel.success == true) {
+      _isProductLoad = false;
+      getAllProducts(context);
+      showSnackBar(context, '${_deleteProductApiResModel.message}');
+    } else {
+      _isProductLoad = false;
+      debugPrint('Step 6 : ${_deleteProductApiResModel.message}');
+    }
     notifyListeners();
   }
 
@@ -184,14 +266,19 @@ class ProductProvider extends ChangeNotifier {
     List<List<String>> valueLists =
         attributes.map((attr) => List<String>.from(attr.values ?? [])).toList();
 
+    List<String> attributeNames =
+        attributes.map((attr) => attr.attributeName).toList();
+
     if (valueLists.length == 1 || valueLists[1].isEmpty) {
       _combos = valueLists.first.map((value) {
-        return {
-          "combination": value, // Single attribute means no need to join
+        Map<String, dynamic> comboMap = {};
+        comboMap[attributeNames.first] = value;
+        comboMap["other_attributes"] = {
           "stock": TextEditingController(text: "0"),
-          "regular_price": TextEditingController(text: "0"),
+          "price": TextEditingController(text: "0"),
           "discount_price": TextEditingController(text: "0"),
         };
+        return comboMap;
       }).toList();
       notifyListeners();
       return;
@@ -207,14 +294,71 @@ class ProductProvider extends ChangeNotifier {
     }
 
     _combos = cartesianProduct(valueLists).map((combination) {
-      return {
-        "combination": combination.join(" - "),
+      Map<String, dynamic> comboMap = {};
+
+      for (int i = 0; i < combination.length; i++) {
+        comboMap[attributeNames[i]] = combination[i];
+      }
+
+      comboMap["other_attributes"] = {
         "stock": TextEditingController(text: "0"),
-        "regular_price": TextEditingController(text: "0"),
+        "price": TextEditingController(text: "0"),
         "discount_price": TextEditingController(text: "0"),
       };
+
+      return comboMap;
     }).toList();
 
     notifyListeners();
   }
+
+  List<Map<String, dynamic>> getFormattedCombinations() {
+    return _combos.map((combo) {
+      final other =
+          combo["other_attributes"] as Map<String, TextEditingController>;
+      final cleaned = {
+        for (var entry in combo.entries)
+          if (entry.key != "other_attributes") entry.key: entry.value,
+        "other_attributes": {
+          "stock": int.tryParse(other["stock"]!.text) ?? 0,
+          "price": int.tryParse(other["price"]!.text) ?? 0,
+          "discount_price": int.tryParse(other["discount_price"]!.text) ?? 0,
+        }
+      };
+      return cleaned;
+    }).toList();
+  }
+}
+
+void showSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      backgroundColor: AppColor.secondaryColor,
+      duration: const Duration(seconds: 3),
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.only(
+        bottom: 50,
+        left: 20,
+        right: 20,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 10,
+      action: SnackBarAction(
+        label: 'Close',
+        textColor: Colors.white,
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    ),
+  );
 }

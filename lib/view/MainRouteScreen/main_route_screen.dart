@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:liqueur_brooze/utlis/assets/app_colors.dart';
 import 'package:liqueur_brooze/view/AddCouponScreen/coupon_screen.dart';
 import 'package:liqueur_brooze/view/Category/category_screen.dart';
 import 'package:liqueur_brooze/view/DashboardScreen/dashboard_screen.dart';
@@ -41,7 +42,17 @@ class MainRouteScreen extends StatelessWidget {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Colors.red,
+          child: Center(
+            child: Text(
+              'Comming Soon',
+              style: TextStyle(
+                color: AppColor.darkTextColor,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Monserat',
+              ),
+            ),
+          ),
         ),
         CouponScreen(),
         ShippingChargeScreen(),
