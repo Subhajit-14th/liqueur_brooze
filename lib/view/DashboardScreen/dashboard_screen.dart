@@ -55,6 +55,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             SizedBox(height: 16),
             buildDashboardCard(
+              isRevenue: false,
               title: "Sales",
               subtitle: "Today",
               value:
@@ -68,6 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             SizedBox(height: 16), // Add spacing between cards
             buildDashboardCard(
+              isRevenue: true,
               title: "Revenue",
               subtitle: "This Month",
               value:
@@ -75,12 +77,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               percentage:
                   "${dashboardProvider.dashboardApiResModel.data?.revenue?.percentage}",
               percentageColor: Colors.green,
-              icon: Icons.attach_money,
+              icon: Icons.money,
               iconColor: Colors.green,
               changeText: "increase",
             ),
             SizedBox(height: 16),
             buildDashboardCard(
+              isRevenue: false,
               title: "Customers",
               subtitle: "This Year",
               value:
@@ -99,6 +102,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget buildDashboardCard({
+    required bool isRevenue,
     required String title,
     required String subtitle,
     required String value,
@@ -152,7 +156,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 CircleAvatar(
                   backgroundColor: iconColor.withOpacity(0.2),
                   radius: 20,
-                  child: Icon(icon, color: iconColor),
+                  child: isRevenue
+                      ? Text(
+                          '£',
+                          style: TextStyle(
+                            color: iconColor,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Icon(icon, color: iconColor),
                 ),
                 const SizedBox(width: 16),
                 Column(
